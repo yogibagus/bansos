@@ -6,6 +6,8 @@ class M_User extends CI_Model
     function __construct()
     {
         parent::__construct();
+        // set utc + 7
+        date_default_timezone_set('Asia/Jakarta');
     }
 
     public function get_all_users()

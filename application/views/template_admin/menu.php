@@ -105,9 +105,12 @@
                     </div>
 
                     <div class="menu-item">
-                        <div class="menu-link"><span class="menu-section fs-5 fw-bolder ps-1 py-1">📰 Berita
-                                Acara</span>
-                        </div>
+                        <a class="menu-link <?= ($this->uri->segment(2) == "data_berita_acara" ? 'active' : '') ?>"
+                            href="<?= base_url('beritaacara/data_berita_acara') ?>">
+                            <span class="menu-section fs-5 fw-bolder ps-1 py-1">📝
+                                Berita Acara
+                            </span>
+                        </a>
                     </div>
 
                     <div class="menu-item">
@@ -160,6 +163,17 @@
                             data-bs-toggle="modal" data-bs-target="#modalAddUser">
                             <i class="ki-outline ki-plus-square fs-3" data-bs-toggle="tooltip" data-bs-placement="top"
                                 title="Tambah User"></i>
+                        </a>
+                    </div>
+                    <? } ?>
+
+                    <!-- Add berita acara -->
+                    <? if ($this->uri->segment(2) == "data_berita_acara") { ?>
+                        <div class="d-flex align-items-center gap-2 gap-lg-3">
+                        <a href="#" class="btn btn-sm btn-flex btn-icon btn-dark align-self-center px-3"
+                            data-bs-toggle="modal" data-bs-target="#modalAddBeritaAcara">
+                            <i class="ki-outline ki-plus-square fs-3" data-bs-toggle="tooltip" data-bs-placement="top"
+                                title="Tambah Berita Acara"></i>
                         </a>
                     </div>
                     <? } ?>
