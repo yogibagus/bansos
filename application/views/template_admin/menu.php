@@ -58,31 +58,47 @@
 
                     <div class="menu-item <?= ($this->uri->segment(1) == "bansos" ? 'active' : '') ?>">
                         <div class="menu-content "><span class="menu-section fs-5 fw-bolder ps-1 py-1">💿 Master
-                                Data</span>
+                            </span>
                         </div>
                     </div>
 
                     <div class="menu-item">
-                        <a class="menu-link <?= ($this->uri->segment(2) == "data_bansos" ? 'active' : '') ?>"
-                            href="<?= base_url('bansos/data_bansos') ?>">
+                        <a class="menu-link <?= ($this->uri->segment(2) == "data_master_bansos" ? 'active' : '') ?>"
+                            href="<?= base_url('bansos/data_master_bansos') ?>">
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
-                            <span class="menu-title">📑 Data Bansos</span>
+                            <span class="menu-title">📑 Master Bansos</span>
+                        </a>
+                    </div>
+
+                    <div class="menu-item <?= ($this->uri->segment(1) == "bansos" ? 'active' : '') ?>">
+                        <div class="menu-content "><span class="menu-section fs-5 fw-bolder ps-1 py-1">📑 Proses
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="menu-item">
+                        <a class="menu-link <?= ($this->uri->segment(2) == "proses" && $filter['status'] == 0 ? 'active' : '') ?>"
+                            href="<?= base_url('bansos/proses?status=0') ?>">
+                            <span class="menu-bullet">
+                                <span class="bullet bullet-dot"></span>
+                            </span>
+                            <span class="menu-title">🔖 Data Belum Tersalur</span>
                         </a>
                     </div>
                     <div class="menu-item">
-                        <a class="menu-link <?= ($this->uri->segment(2) == "data_tersalur" ? 'active' : '') ?>"
-                            href="<?= base_url('bansos/data_tersalur') ?>">
+                        <a class="menu-link <?= ($this->uri->segment(2) == "proses" && $filter['status'] == 1 ? 'active' : '') ?>"
+                            href="<?= base_url('bansos/proses?status=1') ?>">
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
                             <span class="menu-title">📨 Data Tersalur</span>
                         </a>
                     </div>
-                    <div class="menu-item" <?= ($this->uri->segment(2) == "data_tidak_tersalur" ? 'active' : '') ?>"
-                        href="<?= base_url('bansos/data_tidak_tersalur') ?>">
-                        <a class="menu-link" href="ecommerce.html">
+                    <div class="menu-item">
+                        <a class="menu-link <?= ($this->uri->segment(2) == "proses" && $filter['status'] == 2 ? 'active' : '') ?>"
+                            href="<?= base_url('bansos/proses?status=2') ?>">
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
@@ -146,9 +162,11 @@
                             <!--end::Breadcrumb-->
 
                             <!--begin::Title-->
+                            <!-- page-heading d-flex flex-column justify-content-center text-dark text-capitalize fw-bolder m-0 -->
                             <h1
-                                class="page-heading d-flex flex-column justify-content-center text-dark text-capitalize fw-bolder m-0">
+                                class="page-heading text-dark text-capitalize fw-bolder m-0">
                                 <?= ($this->uri->segment(2) ? '<span class="ml-2 mr-2"></span> <a class="text-none text-' . ($this->uri->segment(2) ? 'dark' : 'dark') . '" href="' . site_url($this->uri->segment(1) . '/' . $this->uri->segment(2)) . '">' . str_replace(array("-", "_"), " ", $this->uri->segment(2)) . '</a>' : ''); ?>
+                                <?= (!empty($title) ? " - " . $title : "" ) ?>
                             </h1>
                             <!--end::Title-->
                         </div>
@@ -169,11 +187,33 @@
 
                     <!-- Add berita acara -->
                     <? if ($this->uri->segment(2) == "data_berita_acara") { ?>
-                        <div class="d-flex align-items-center gap-2 gap-lg-3">
+                    <div class="d-flex align-items-center gap-2 gap-lg-3">
                         <a href="#" class="btn btn-sm btn-flex btn-icon btn-dark align-self-center px-3"
                             data-bs-toggle="modal" data-bs-target="#modalAddBeritaAcara">
                             <i class="ki-outline ki-plus-square fs-3" data-bs-toggle="tooltip" data-bs-placement="top"
                                 title="Tambah Berita Acara"></i>
+                        </a>
+                    </div>
+                    <? } ?>
+
+                    <!-- add master bansos -->
+                    <? if ($this->uri->segment(2) == "data_master_bansos") { ?>
+                    <div class="d-flex align-items-center gap-2 gap-lg-3">
+                        <a href="#" class="btn btn-sm btn-flex btn-icon btn-dark align-self-center px-3"
+                            data-bs-toggle="modal" data-bs-target="#modalAddMasterBansos">
+                            <i class="ki-outline ki-plus-square fs-3" data-bs-toggle="tooltip" data-bs-placement="top"
+                                title="Tambah Master Bansos"></i>
+                        </a>
+                    </div>
+                    <? } ?>
+
+                     <!-- add data bansos -->
+                     <? if ($this->uri->segment(2) == "proses" && $filter['status'] == 0) { ?>
+                    <div class="d-flex align-items-center gap-2 gap-lg-3">
+                        <a href="#" class="btn btn-sm btn-flex btn-icon btn-dark align-self-center px-3"
+                            data-bs-toggle="modal" data-bs-target="#modalAddBansos" id="btnAddBansos">
+                            <i class="ki-outline ki-plus-square fs-3" data-bs-toggle="tooltip" data-bs-placement="top"
+                                title="Tambah Data Bansos"></i>
                         </a>
                     </div>
                     <? } ?>
