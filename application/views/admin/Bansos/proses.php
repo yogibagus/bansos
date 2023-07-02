@@ -544,10 +544,6 @@
                     icon: 'error',
                     confirmButtonText: 'Ok',
                     allowOutsideClick: false,
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        location.reload();
-                    }
                 })
                 return false;
             }
@@ -574,10 +570,6 @@
                     icon: 'error',
                     confirmButtonText: 'Ok',
                     allowOutsideClick: false,
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        location.reload();
-                    }
                 })
                 return false;
             }
