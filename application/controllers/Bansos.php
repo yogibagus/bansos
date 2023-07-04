@@ -7,6 +7,7 @@ class Bansos extends CI_Controller
     {
         parent::__construct();
         $this->load->model(['M_User', 'M_Bansos']);
+        $this->load->library('Excel');
         // get session
         $this->id = $this->session->userdata('id');
         $this->role = $this->session->userdata('role');
@@ -200,5 +201,70 @@ class Bansos extends CI_Controller
         $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Bansos berhasil diupdate!</div>');
         return true;
     }
+
+    // download_format_bansos
+    public function download_format_bansos()
+    {
+        $this->load->helper('download');
+        $data = file_get_contents(base_url('assets/format/download_format_bansos.xlsx'));
+        $name = 'format_bansos.xlsx';
+        force_download($name, $data);
+    }
+
+    // import_data_bansos
+    public function import_data_bansos($id)
+    {
+        $id_master_bansos = $id;
+        // check if empty
+        if ($id_master_bansos == '' || $id_master_bansos == null){
+            return [
+                'error' => 'Master Bansos tidak boleh kosong!',
+                'message' => 'Upload gagal!',
+                'status' => false
+            ];
+        }
+
+        // path
+        $path = './berkas/uploads';
+        // check if path exist
+        if (!file_exists($path)) {
+            mkdir($path, 0777, true);
+        }
+
+        $config['upload_path'] = $path;
+        $config['allowed_types'] = 'xlsx';
+        $config['max_size'] = 2000; // 2MB
+        $config['file_name'] = 'temp_bansos';
+        $this->load->library('upload', $config);
+        $this->upload->initialize($config);
+
+
+        if (!$this->upload->do_upload('file')) {
+            $response['error'] = $this->upload->display_errors();
+            $response['message'] = 'Upload gagal!';
+            $response['status'] = false;
+            echo json_encode($response);
+            return;
+        } else {
+            $file = $this->upload->data();
+            $check = $this->excel->import_data_bansos($file['full_path'], $id_master_bansos);
+            if ($check['status'] == false) {
+                $response['error'] = $check['message'];
+                $response['message'] = 'Upload gagal!';
+                $response['status'] = false;
+                echo json_encode($response);
+                return;
+            }
+
+            // remove file
+            unlink($file['full_path']);
+
+            $response['message'] = 'Upload berhasil!';
+            $response['status'] = true;
+            echo json_encode($response);
+            return;
+        }
+    }
+    
 
 }
