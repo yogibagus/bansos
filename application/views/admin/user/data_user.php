@@ -177,24 +177,24 @@
                                             <!-- Role -->
                                             <div class="mb-3">
                                                 <label for="role" class="form-label">Role</label>
-                                                <? if ($value->role == 1) { ?>
+                                                <?php if ($value->role == 1) { ?>
                                                 <input type="text" class="form-control" id="role" value="Super Admin"
                                                     readonly>
-                                                <? } else if ($value->role == 2) { ?>
+                                                <?php } else if ($value->role == 2) { ?>
                                                 <input type="text" class="form-control" id="role" value="Admin" readonly>
-                                                <? } else if ($value->role == 3) { ?>
+                                                <?php } else if ($value->role == 3) { ?>
                                                 <input type="text" class="form-control" id="role" value="User" readonly>
-                                                <? } ?>
+                                                <?php } ?>
                                             </div>
                                             <!-- status -->
                                             <div class="mb-3">
                                                 <label for="status" class="form-label">Status</label>
-                                                <? if ($value->status == 0) { ?>
+                                                <?php if ($value->status == 0) { ?>
                                                 <input type="text" class="form-control" id="status" value="Non Aktif"
                                                     readonly>
-                                                <? } else if ($value->status == 1) { ?>
+                                                <?php } else if ($value->status == 1) { ?>
                                                 <input type="text" class="form-control" id="status" value="Aktif" readonly>
-                                                <? } ?>
+                                                <?php } ?>
                                             </div>
                                         </div>
                                     </div>
