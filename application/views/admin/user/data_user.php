@@ -103,20 +103,20 @@
                 <td class="align-middle"><?= $value->email ?></td>
                 <td class="align-middle"><?= $value->nohp ?></td>
                 <td class="align-middle">
-                    <? if ($value->role == 1) { ?>
+                    <?php if ($value->role == 1) { ?>
                     <span class="badge badge-danger">Super Admin</span>
-                    <? } else if ($value->role == 2) { ?>
+                    <?php } else if ($value->role == 2) { ?>
                     <span class="badge badge-warning">Admin</span>
-                    <? } else if ($value->role == 3) { ?>
+                    <?php } else if ($value->role == 3) { ?>
                     <span class="badge badge-primary">User</span>
-                    <? } ?>
+                    <?php } ?>
                 </td>
                 <td class="align-middle">
-                    <? if ($value->status == 0) { ?>
+                    <?php if ($value->status == 0) { ?>
                     <span class="badge badge-danger">Non Aktif</span>
-                    <? } else if ($value->status == 1) { ?>
+                    <?php } else if ($value->status == 1) { ?>
                     <span class="badge badge-success">Aktif</span>
-                    <? } ?>
+                    <?php } ?>
                 </td>
                 <td class="align-middle">
                     <!-- Detail User -->
