@@ -175,7 +175,7 @@
                     <!--end::Toolbar wrapper-->
 
                     <!-- Add User -->
-                    <? if ($this->uri->segment(2) == "data_user") { ?>
+                    <?php if ($this->uri->segment(2) == "data_user") { ?>
                     <div class="d-flex align-items-center gap-2 gap-lg-3">
                         <a href="#" class="btn btn-sm btn-flex btn-icon btn-dark align-self-center px-3"
                             data-bs-toggle="modal" data-bs-target="#modalAddUser">
@@ -183,10 +183,10 @@
                                 title="Tambah User"></i>
                         </a>
                     </div>
-                    <? } ?>
+                    <?php } ?>
 
                     <!-- Add berita acara -->
-                    <? if ($this->uri->segment(2) == "data_berita_acara") { ?>
+                    <?php if ($this->uri->segment(2) == "data_berita_acara") { ?>
                     <div class="d-flex align-items-center gap-2 gap-lg-3">
                         <a href="#" class="btn btn-sm btn-flex btn-icon btn-dark align-self-center px-3"
                             data-bs-toggle="modal" data-bs-target="#modalAddBeritaAcara">
@@ -194,10 +194,10 @@
                                 title="Tambah Berita Acara"></i>
                         </a>
                     </div>
-                    <? } ?>
+                    <?php } ?>
 
                     <!-- add master bansos -->
-                    <? if ($this->uri->segment(2) == "data_master_bansos") { ?>
+                    <?php if ($this->uri->segment(2) == "data_master_bansos") { ?>
                     <div class="d-flex align-items-center gap-2 gap-lg-3">
                         <a href="#" class="btn btn-sm btn-flex btn-icon btn-dark align-self-center px-3"
                             data-bs-toggle="modal" data-bs-target="#modalAddMasterBansos">
@@ -205,10 +205,10 @@
                                 title="Tambah Master Bansos"></i>
                         </a>
                     </div>
-                    <? } ?>
+                    <?php } ?>
 
                      <!-- add data bansos -->
-                     <? if ($this->uri->segment(2) == "proses" && $filter['status'] == 0) { ?>
+                     <?php if ($this->uri->segment(2) == "proses" && $filter['status'] == 0) { ?>
                     <div class="d-flex align-items-center gap-2 gap-lg-3">
                         <a href="#" class="btn btn-sm btn-flex btn-icon btn-dark align-self-center px-3"
                             data-bs-toggle="modal" data-bs-target="#modalAddBansos" id="btnAddBansos">
@@ -216,7 +216,7 @@
                                 title="Tambah Data Bansos"></i>
                         </a>
                     </div>
-                    <? } ?>
+                    <?php } ?>
 
                 </div>
                 <!--end::Toolbar-->
