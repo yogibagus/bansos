@@ -106,7 +106,8 @@
             </div>
 
             <div id="kt_accordion_3_item_1" class="fs-6 ps-0 collapse" data-bs-parent="#kt_accordion_3">
-                <form action="<?= base_url('bansos/proses?status='.$filter["status"]) ?>" method="post">
+                <form action="<?= base_url('bansos/all') ?>" method="post">
+                    <input type="hidden" name="status" value="<?= $filter["status"] ?>">
                     <div class="row">
                         <div class="col-md-3 col-sm-6 col-12">
                             <label for="">Master Bansos</label>
@@ -117,6 +118,18 @@
                                     <?= $filter["id_master_bansos"] == $value->id ? 'selected' : '' ?>>
                                     <?= $value->nama ?>
                                     <?php } ?>
+                            </select>
+                        </div>
+                        <!-- drop down status -->
+                        <div class="col-md-3 col-sm-6 col-12">
+                            <label for="">Status</label>
+                            <select class="form-control form-control-sm" name="status" id="filter_status">
+                                <option value="" selected disabled>- Status -</option>
+                                <option value="0" <?= $filter["status"] == '0' ? 'selected' : '' ?>>Belum Tersalur
+                                </option>
+                                <option value="1" <?= $filter["status"] == '1' ? 'selected' : '' ?>>Tersalur</option>
+                                <option value="2" <?= $filter["status"] == '2' ? 'selected' : '' ?>>Tidak Tersalur
+                                </option>
                             </select>
                         </div>
                         <div class="col-md-3 col-sm-6 col-12">
@@ -196,77 +209,9 @@
 </div> -->
 
 <div class="card container p-5">
-    <div class="d-flex justify-content-between mb-3">
-        <div>
-            <h5 class="mt-3">Total Data: <?= count($data) ?><br><span>Data Dipilih:<span id="total_checked">
-                        0</span></span>
-        </div>
-        <div>
-            <?php if ($filter["status"] != '1') { ?>
-            <a type="button" class="btn btn-sm btn-success mt-3" data-bs-toggle="modal"
-                data-bs-target="#modalTersalur">Tersalur</a>
-            <!-- modal tersalur confirmation-->
-            <div class="modal fade" id="modalTersalur" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="modalTersalur">Konfirmasi Tersalur</h5>
-                            </h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="alert alert-danger" role="alert">
-                                <strong>Penting!</strong> Data yang sudah tersalur tidak dapat dikembalikan lagi.
-                            </div>
-                            <p>Apakah anda yakin ingin mengubah status data yang dipilih menjadi <b>Tersalur</b>?</p>
-                            <br>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                            <button type="submit" id="submit_tersalur" class="btn btn-success">Simpan <i
-                                    class="fas fa-save"></i></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <button type="button" class="btn btn-sm btn-danger mt-3" data-bs-toggle="modal"
-                data-bs-target="#modalTidakTersalur">Tidak Tersalur</button>
-
-            <!-- modal tidak tersalur confirmation-->
-            <div class="modal fade" id="modalTidakTersalur" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="modalTidakTersalur">Konfirmasi Tidak Tersalur</h5>
-                            </h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="alert alert-danger" role="alert">
-                                <strong>Penting!</strong> Data yang sudah tersalur tidak dapat dikembalikan lagi.
-                            </div>
-                            <p>Apakah anda yakin ingin mengubah status data yang dipilih menjadi <b>Tidak
-                                    Tersalur</b>?
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                            <button type="submit" id="submit_tidak_tersalur" class="btn btn-danger">Simpan <i
-                                    class="fas fa-save"></i></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <?php } ?>
-        </div>
-    </div>
     <table class="table table-striped table-hover fw-bold" id="dataTables">
         <thead class="thead-inverse bg-dark text-white">
             <tr>
-                <?php if ($filter["status"] != '1') { ?>
-                <!-- hanya tampilkan ketika status bukan 1 / data tersalur -->
-                <th></th>
-                <?php } ?>
                 <th width="5%" class="text-center">No</th>
                 <th width="20%">Nama</th>
                 <th>Norek</th>
@@ -286,13 +231,6 @@
             <!-- php foreach -->
             <?php $no=1; foreach ($data as $key => $value) {?>
             <tr>
-                <?php if ($filter["status"] != '1') { ?>
-                <!-- hanya tampilkan ketika status bukan 1 / data tersalur -->
-                <td class="align-middle p-3">
-                    <input type="checkbox" class="form-check-input" name="" id="check<?= $value->id ?>"
-                        value="<?= $value->id ?>">
-                </td>
-                <?php } ?>
                 <td class="align-middle text-center"><?= $no ?></td>
                 <td class="align-middle"><?= $value->nama ?></td>
                 <td class="align-middle"><?= $value->norek ?></td>
@@ -488,141 +426,6 @@
     $(document).ready(function () {
         $('#dataTables').DataTable({
         });
-    });
-</script>
-
-<!-- make a function to handle checkbox on click -->
-<script>
-    $(document).ready(function () {
-        // check checkbox
-        $('input[type="checkbox"]').click(function () {
-            if ($(this).is(':checked')) {
-                $('#checkAll').prop('checked', false);
-            }
-
-            // count total checked checkbox
-            var totalChecked = $('input[type="checkbox"]:checked').length;
-            $('#total_checked').html(" " + totalChecked);
-
-            // get the checked checkbox values as an array
-            var checkedValues = $('input[type="checkbox"]:checked').map(function () {
-                return this.value;
-            }).get();
-
-            console.log(checkedValues);
-
-            // set the value of the idInput field as a JSON string of the array
-            $('#checked_list').val(JSON.stringify(checkedValues));
-
-            console.log(JSON.stringify(checkedValues));
-        });
-
-        // log all checked checkbox value
-        console.log($('input[type="checkbox"]:checked').map(function () {
-            return this.value;
-        }).get());
-    });
-</script>
-
-<!-- jquery submit_tidak_tersalur with ajax -->
-<script>
-    $(document).ready(function () {
-        // submit_tidak_tersalur
-        $('#submit_tidak_tersalur').click(function () {
-            var checkedValues = $('input[type="checkbox"]:checked').map(function () {
-                return this.value;
-            }).get();
-
-            // check if empty
-            if (checkedValues == '') {
-                // close modal
-                $('#modalTidakTersalur').modal('hide');
-                // swall alert with button to reload page
-                Swal.fire({
-                    title: 'Gagal!',
-                    text: 'Tidak ada data yang dipilih',
-                    icon: 'error',
-                    confirmButtonText: 'Ok',
-                    allowOutsideClick: false,
-                })
-                return false;
-            }
-
-            // set the value of the idInput field as a JSON string of the array
-            $('#checked_list').val(JSON.stringify(checkedValues));
-            bulk_update_status(2, checkedValues);
-        });
-
-        // submit_tersalur
-        $('#submit_tersalur').click(function () {
-            var checkedValues = $('input[type="checkbox"]:checked').map(function () {
-                return this.value;
-            }).get();
-
-            // check if empty
-            if (checkedValues == '') {
-                // close modal
-                $('#modalTersalur').modal('hide');
-                // swall alert with button to reload page
-                Swal.fire({
-                    title: 'Gagal!',
-                    text: 'Tidak ada data yang dipilih',
-                    icon: 'error',
-                    confirmButtonText: 'Ok',
-                    allowOutsideClick: false,
-                })
-                return false;
-            }
-
-            // set the value of the idInput field as a JSON string of the array
-            $('#checked_list').val(JSON.stringify(checkedValues));
-            bulk_update_status(1, checkedValues);
-        });
-
-        function bulk_update_status(status, checkedValues) {
-            // close all modal
-            $('#modalTersalur').modal('hide');
-            $('#modalTidakTersalur').modal('hide');
-            $.ajax({
-                url: "<?= base_url('bansos/bulk_update_bansos_status/') ?>",
-                type: "POST",
-                data: {
-                    checked_list: checkedValues,
-                    status: status
-                },
-                success: function (data) {
-                    // swall alert with button to reload page
-                    Swal.fire({
-                        title: 'Berhasil!',
-                        text: 'Data berhasil diubah',
-                        icon: 'success',
-                        confirmButtonText: 'Ok',
-                        allowOutsideClick: false,
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            location.reload();
-                        }
-                    })
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    // close modal
-                    $('#modalTersalur').modal('hide');
-                    // swall alert with button to reload page
-                    Swal.fire({
-                        title: 'Gagal!',
-                        text: 'Data gagal diubah',
-                        icon: 'error',
-                        confirmButtonText: 'Ok',
-                        allowOutsideClick: false,
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            location.reload();
-                        }
-                    })
-                    console.log(jqXHR, textStatus, errorThrown);
-                }
-            });
-        }
     });
 </script>
 

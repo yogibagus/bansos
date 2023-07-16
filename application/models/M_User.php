@@ -76,4 +76,15 @@ class M_User extends CI_Model
             return false;
         }
     }
+
+    // get user by role
+    public function get_user_by_role($role)
+    {
+        $query = $this->db->select('*')
+            ->from('tb_user')
+            ->where('role', $role)
+            ->where('is_deleted', 0)
+            ->get();
+        return $query->result();
+    }
 }

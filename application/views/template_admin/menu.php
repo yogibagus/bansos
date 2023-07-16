@@ -71,61 +71,28 @@
                             <span class="menu-title">📑 Master Bansos</span>
                         </a>
                     </div>
-
-                    <div class="menu-item <?= ($this->uri->segment(1) == "bansos" ? 'active' : '') ?>">
-                        <div class="menu-content "><span class="menu-section fs-5 fw-bolder ps-1 py-1">📑 Proses
-                            </span>
-                        </div>
-                    </div>
-
                     <div class="menu-item">
                         <a class="menu-link <?= ($this->uri->segment(2) == "proses" && $filter['status'] == 0 ? 'active' : '') ?>"
-                            href="<?= base_url('bansos/proses?status=0') ?>">
+                            href="<?= base_url('bansos/all') ?>">
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
-                            <span class="menu-title">🔖 Data Belum Tersalur</span>
-                        </a>
-                    </div>
-                    <div class="menu-item">
-                        <a class="menu-link <?= ($this->uri->segment(2) == "proses" && $filter['status'] == 1 ? 'active' : '') ?>"
-                            href="<?= base_url('bansos/proses?status=1') ?>">
-                            <span class="menu-bullet">
-                                <span class="bullet bullet-dot"></span>
-                            </span>
-                            <span class="menu-title">📨 Data Tersalur</span>
-                        </a>
-                    </div>
-                    <div class="menu-item">
-                        <a class="menu-link <?= ($this->uri->segment(2) == "proses" && $filter['status'] == 2 ? 'active' : '') ?>"
-                            href="<?= base_url('bansos/proses?status=2') ?>">
-                            <span class="menu-bullet">
-                                <span class="bullet bullet-dot"></span>
-                            </span>
-                            <span class="menu-title">📩 Data Tidak Tersalur</span>
-                        </a>
-                    </div>
-                    <div class="menu-item" <?= ($this->uri->segment(2) == "cetak_data" ? 'active' : '') ?>"
-                        href="<?= base_url('bansos/cetak_data') ?>">
-                        <a class="menu-link" href="projects.html">
-                            <span class="menu-bullet">
-                                <span class="bullet bullet-dot"></span>
-                            </span>
-                            <span class="menu-title">🖨️ Cetak Data</span>
+                            <span class="menu-title">🔖 Data Bansos</span>
                         </a>
                     </div>
 
                     <div class="menu-item">
-                        <div class="menu-link"><span class="menu-section fs-5 fw-bolder ps-1 py-1">♻️ Data Proses</span>
+                        <div class="menu-link"><span class="menu-section fs-5 fw-bolder ps-1 py-1">♻️ Penyaluran</span>
                         </div>
                     </div>
 
                     <div class="menu-item">
-                        <a class="menu-link <?= ($this->uri->segment(2) == "data_berita_acara" ? 'active' : '') ?>"
-                            href="<?= base_url('beritaacara/data_berita_acara') ?>">
-                            <span class="menu-section fs-5 fw-bolder ps-1 py-1">📝
-                                Berita Acara
+                        <a class="menu-link <?= ($this->uri->segment(2) == "data_master_penyaluran") ?>"
+                            href="<?= base_url('penyaluran/data_master_penyaluran') ?>">
+                            <span class="menu-bullet">
+                                <span class="bullet bullet-dot"></span>
                             </span>
+                            <span class="menu-title">🗂 Master Penyaluran</span>
                         </a>
                     </div>
 
@@ -163,8 +130,7 @@
 
                             <!--begin::Title-->
                             <!-- page-heading d-flex flex-column justify-content-center text-dark text-capitalize fw-bolder m-0 -->
-                            <h1
-                                class="page-heading text-dark text-capitalize fw-bolder m-0">
+                            <h1 class="page-heading text-dark text-capitalize fw-bolder m-0">
                                 <?= ($this->uri->segment(2) ? '<span class="ml-2 mr-2"></span> <a class="text-none text-' . ($this->uri->segment(2) ? 'dark' : 'dark') . '" href="' . site_url($this->uri->segment(1) . '/' . $this->uri->segment(2)) . '">' . str_replace(array("-", "_"), " ", $this->uri->segment(2)) . '</a>' : ''); ?>
                                 <?= (!empty($title) ? " - " . $title : "" ) ?>
                             </h1>
@@ -207,13 +173,36 @@
                     </div>
                     <?php } ?>
 
-                     <!-- add data bansos -->
-                     <?php if ($this->uri->segment(2) == "proses" && $filter['status'] == 0) { ?>
+                    <!-- add data bansos -->
+                    <?php if ($this->uri->segment(2) == "all") { ?>
                     <div class="d-flex align-items-center gap-2 gap-lg-3">
                         <a href="#" class="btn btn-sm btn-flex btn-icon btn-dark align-self-center px-3"
                             data-bs-toggle="modal" data-bs-target="#modalAddBansos" id="btnAddBansos">
                             <i class="ki-outline ki-plus-square fs-3" data-bs-toggle="tooltip" data-bs-placement="top"
                                 title="Tambah Data Bansos"></i>
+                        </a>
+                    </div>
+                    <?php } ?>
+
+                    <!-- add master penyaluran -->
+                    <?php if ($this->uri->segment(2) == "data_master_penyaluran") { ?>
+                    <div class="d-flex align-items-center gap-2 gap-lg-3">
+                        <a href="#" class="btn btn-sm btn-flex btn-icon btn-dark align-self-center px-3"
+                            data-bs-toggle="modal" data-bs-target="#modalAddMasterPenyaluran">
+                            <i class="ki-outline ki-plus-square fs-3" data-bs-toggle="tooltip" data-bs-placement="top"
+                                title="Tambah Master Penyaluran"></i>
+                        </a>
+                    </div>
+                    <?php } ?>
+
+                    <!-- add data penyaluran -->
+                    <?php if ($this->uri->segment(2) == "data_bansos") { ?>
+                    <div class="d-flex align-items-center gap-2 gap-lg-3">
+                        <a href="#" class="btn btn-sm btn-flex btn-dark align-self-center px-3"
+                            data-bs-toggle="modal" data-bs-target="#modalAddDataPenyaluran">
+                            <i class="fa fa-paper-plane fs-3" data-bs-toggle="tooltip" data-bs-placement="top"
+                                title="Kirim Data Ke CO Magang"></i>
+                                Kirim Data
                         </a>
                     </div>
                     <?php } ?>

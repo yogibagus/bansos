@@ -104,7 +104,7 @@
 
                                     <!--begin::Menu item-->
                                     <div class="menu-item px-5">
-                                        <a href="<?= base_url() ?>login/logout"
+                                        <a href="<?= base_url() ?>login/logout" id="btnLogout"
                                             class="menu-link px-5">
                                             Sign Out
                                         </a>
@@ -123,3 +123,13 @@
                 <!--end::Header container-->
             </div>
             <!--end::Header-->
+
+            <!-- jquery script to remocve all local storage -->
+            <script>
+                $(document).ready(function () {
+                    $('#btnLogout').click(function () {
+                        localStorage.clear();
+                        console.log('localStorage cleared')
+                    });
+                });
+            </script>

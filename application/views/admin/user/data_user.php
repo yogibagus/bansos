@@ -106,9 +106,11 @@
                     <?php if ($value->role == 1) { ?>
                     <span class="badge badge-danger">Super Admin</span>
                     <?php } else if ($value->role == 2) { ?>
-                    <span class="badge badge-warning">Admin</span>
+                    <span class="badge badge-warning">Penyelia</span>
                     <?php } else if ($value->role == 3) { ?>
-                    <span class="badge badge-primary">User</span>
+                    <span class="badge badge-primary">PIC</span>
+                    <?php } else if ($value->role == 4) { ?>
+                    <span class="badge badge-success">CO Magang</span>
                     <?php } ?>
                 </td>
                 <td class="align-middle">
@@ -130,7 +132,8 @@
                         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
                             <div class="modal-content bg-light">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="modalDetailUserLabel">Detail User - <?= $value->nama ?></h5>
+                                    <h5 class="modal-title" id="modalDetailUserLabel">Detail User - <?= $value->nama ?>
+                                    </h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
                                 </div>
@@ -181,9 +184,13 @@
                                                 <input type="text" class="form-control" id="role" value="Super Admin"
                                                     readonly>
                                                 <?php } else if ($value->role == 2) { ?>
-                                                <input type="text" class="form-control" id="role" value="Admin" readonly>
+                                                <input type="text" class="form-control" id="role" value="Penyelia"
+                                                    readonly>
                                                 <?php } else if ($value->role == 3) { ?>
-                                                <input type="text" class="form-control" id="role" value="User" readonly>
+                                                <input type="text" class="form-control" id="role" value="PIC" readonly>
+                                                <?php } else if ($value->role == 4) { ?>
+                                                <input type="text" class="form-control" id="role" value="CO Magang"
+                                                    readonly>
                                                 <?php } ?>
                                             </div>
                                             <!-- status -->
@@ -193,7 +200,8 @@
                                                 <input type="text" class="form-control" id="status" value="Non Aktif"
                                                     readonly>
                                                 <?php } else if ($value->status == 1) { ?>
-                                                <input type="text" class="form-control" id="status" value="Aktif" readonly>
+                                                <input type="text" class="form-control" id="status" value="Aktif"
+                                                    readonly>
                                                 <?php } ?>
                                             </div>
                                         </div>
@@ -202,14 +210,14 @@
                             </div>
                         </div>
                     </div>
-    
+
                     <!-- Edit User -->
                     <a type="button" class="btn btn-sm btn-icon btn-light-primary" data-bs-toggle="modal"
                         data-bs-target="#modalEditUser<?= $value->id ?>">
                         <i class="fa fa-edit" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top"
                             title="Edit"></i>
                     </a>
-    
+
                     <!-- Modal Edit User -->
                     <div class="modal fade" id="modalEditUser<?= $value->id ?>" tabindex="-1" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
@@ -231,20 +239,21 @@
                                                 <!-- email -->
                                                 <div class="mb-3">
                                                     <label for="edit_email" class="form-label">Email</label>
-                                                    <input type="email" class="form-control" id="edit_email" name="email"
-                                                        value="<?= $value->email ?>" required>
+                                                    <input type="email" class="form-control" id="edit_email"
+                                                        name="email" value="<?= $value->email ?>" required>
                                                 </div>
                                                 <!-- no hp -->
                                                 <div class="mb-3">
                                                     <label for="edit_nohp" class="form-label">No Telp</label>
                                                     <input type="number" class="form-control" id="edit_nohp" name="nohp"
-                                                        min="0" max="9999999999999" value="<?= $value->nohp ?>" required>
+                                                        min="0" max="9999999999999" value="<?= $value->nohp ?>"
+                                                        required>
                                                 </div>
                                                 <!-- alamat -->
                                                 <div class="mb-3">
                                                     <label for="edit_alamat" class="form-label">Alamat</label>
-                                                    <textarea class="form-control" id="edit_alamat" name="alamat" rows="3"
-                                                        required><?= $value->alamat ?></textarea>
+                                                    <textarea class="form-control" id="edit_alamat" name="alamat"
+                                                        rows="3" required><?= $value->alamat ?></textarea>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
@@ -253,10 +262,12 @@
                                                     <label for="edit_jk" class="form-label">Jenis Kelamin</label>
                                                     <select class="form-control" id="edit_jk" name="jk" required>
                                                         <option value="Laki-laki"
-                                                            <?= ($value->jk == 'Laki-laki') ? 'selected' : '' ?>>Laki-laki
+                                                            <?= ($value->jk == 'Laki-laki') ? 'selected' : '' ?>>
+                                                            Laki-laki
                                                         </option>
                                                         <option value="Perempuan"
-                                                            <?= ($value->jk == 'Perempuan') ? 'selected' : '' ?>>Perempuan
+                                                            <?= ($value->jk == 'Perempuan') ? 'selected' : '' ?>>
+                                                            Perempuan
                                                         </option>
                                                     </select>
                                                 </div>
@@ -270,21 +281,30 @@
                                                 <div class="mb-3">
                                                     <label for="edit_role" class="form-label">Role</label>
                                                     <select class="form-control" id="edit_role" name="role" required>
-                                                        <option value="1" <?= ($value->role == 1) ? 'selected' : '' ?>>Super
+                                                        <option value="1" <?= ($value->role == 1) ? 'selected' : '' ?>>
+                                                            Super
                                                             Admin</option>
-                                                        <option value="2" <?= ($value->role == 2) ? 'selected' : '' ?>>Admin
+                                                        <option value="2" <?= ($value->role == 2) ? 'selected' : '' ?>>
+                                                            Penyelia
                                                         </option>
-                                                        <option value="3" <?= ($value->role == 3) ? 'selected' : '' ?>>User
+                                                        <option value="3" <?= ($value->role == 3) ? 'selected' : '' ?>>
+                                                            PIC
                                                         </option>
+                                                        <option value="4" <?= ($value->role == 4) ? 'selected' : '' ?>>
+                                                            CO Magang
+                                                        </option>
+
                                                     </select>
                                                 </div>
                                                 <!-- status -->
                                                 <div class="mb-3">
                                                     <label for="edit_status" class="form-label">Status</label required>
                                                     <select class="form-control" id="edit_status" name="status">
-                                                        <option value="0" <?= ($value->status == 0) ? 'selected' : '' ?>>Non
+                                                        <option value="0"
+                                                            <?= ($value->status == 0) ? 'selected' : '' ?>>Non
                                                             Aktif</option>
-                                                        <option value="1" <?= ($value->status == 1) ? 'selected' : '' ?>>
+                                                        <option value="1"
+                                                            <?= ($value->status == 1) ? 'selected' : '' ?>>
                                                             Aktif</option>
                                                     </select>
                                                 </div>
@@ -293,7 +313,8 @@
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary"
                                                 data-bs-dismiss="modal">Batal</button>
-                                            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Simpan
+                                            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i>
+                                                Simpan
                                                 Perubahan</button>
                                         </div>
                                     </form>
@@ -301,21 +322,22 @@
                             </div>
                         </div>
                     </div>
-    
-    
+
+
                     <!-- Delete User -->
                     <a type="button" class="btn btn-sm btn-icon btn-light-danger" data-bs-toggle="modal"
                         data-bs-target="#modalDeleteUser<?= $value->id ?>">
                         <i class="fa fa-trash" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top"
                             title="Delete"></i>
                     </a>
-    
+
                     <!-- Modal Delete User -->
                     <div class="modal fade" id="modalDeleteUser<?= $value->id ?>" tabindex="-1" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="modalDeleteUserLabel">Delete User - <?= $value->nama ?></h5>
+                                    <h5 class="modal-title" id="modalDeleteUserLabel">Delete User - <?= $value->nama ?>
+                                    </h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
                                 </div>
@@ -326,14 +348,15 @@
                                     </p>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Batal</button>
                                     <a href="<?= base_url('user/delete_user/' . $value->id) ?>"
                                         class="btn btn-danger">Delete</a>
                                 </div>
                             </div>
                         </div>
                     </div>
-    
+
                 </td>
             </tr>
             <?php $no++; } ?>

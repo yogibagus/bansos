@@ -19,12 +19,12 @@ class Bansos extends CI_Controller
             $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Anda belum log-in!</div>');
             redirect('login');
         } 
-        // else {
-        //     if ($this->role != ) {
-        //         $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Tidak memiliki akses!</div>');
-        //         redirect('');
-        //     }
-        // }
+        else {
+            if ($this->role != 1) {
+                $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Tidak memiliki akses!</div>');
+                redirect('');
+            }
+        }
     }
 
     public function index(){
@@ -79,19 +79,10 @@ class Bansos extends CI_Controller
         redirect('bansos/data_master_bansos');
     }
     
-    public function proses()
+    // get all data bansos
+    public function all()
     {
-            
-            $status = $this->input->get('status') ?? null;
-            if ($status == '0') {
-                $data["title"] = "Data Belum Tersalur";
-            } else if ($status == '1') {
-                $data["title"] = "Data Tersalur";
-            } else if ($status == '2') {
-                $data["title"] = "Data Tidak Tersalur";
-            } else {
-                redirect('bansos/proses?status=0');
-            }
+            $data["title"] = "Data Bansos";
 
             $data["master_bansos"] = $this->M_Bansos->get_all_master_bansos();
 
@@ -103,10 +94,10 @@ class Bansos extends CI_Controller
                 'id_master_bansos' => $this->input->post('id') ?? null,
                 'tahun' => $this->input->post('tahun') ?? null,
                 'jenis_bansos' => $this->input->post('jenis_bansos') ?? null,
+                'status' => $this->input->post('status') ?? null,
                 'kabupaten' => $this->input->post('kabupaten'),
                 'kecamatan' => $this->input->post('kecamatan'),
                 'kelurahan' => $this->input->post('kelurahan'),
-                'status' => $status,
             ];
             $data["filter"] = $filter;
             // log
@@ -116,7 +107,7 @@ class Bansos extends CI_Controller
         $this->load->view('template_admin/meta', $data);
         $this->load->view('template_admin/header', $data);
         $this->load->view('template_admin/menu', $data);
-        $this->load->view('admin/bansos/proses', $data);
+        $this->load->view('admin/bansos/all', $data);
         $this->load->view('template_admin/footer', $data);
     }
 
@@ -140,10 +131,10 @@ class Bansos extends CI_Controller
         $check = $this->M_Bansos->update_bansos($data, $id);
         if ($check == false) {
             $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Bansos tidak dapat diupdate!</div>');
-            redirect('bansos/proses?status='.$this->input->post('current_status'));
+            redirect($this->agent->referrer());
         }
         $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Bansos berhasil diupdate!</div>');
-        redirect('bansos/proses?status='.$this->input->post('current_status'));
+        redirect($this->agent->referrer());
     }
 
     // create bansos
@@ -154,7 +145,7 @@ class Bansos extends CI_Controller
         // check if empty
         if ($id_master_bansos == '' || $id_master_bansos == null){
             $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Master Bansos tidak boleh kosong!</div>');
-            redirect('bansos/proses?status='.$this->input->post('current_status'));
+            redirect($this->agent->referrer());
         }
 
         $data = [
@@ -173,10 +164,10 @@ class Bansos extends CI_Controller
         $check = $this->M_Bansos->update_bansos($data);
         if ($check == false) {
             $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Bansos tidak dapat ditambahkan!</div>');
-            redirect('bansos/proses?status='.$this->input->post('current_status'));
+            redirect($this->agent->referrer());
         }
         $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Bansos berhasil ditambahkan!</div>');
-        redirect('bansos/proses?status='.$this->input->post('current_status'));
+        redirect($this->agent->referrer());
     }
 
     // bulk update bansos status with array id, example is [2,3,4]
@@ -187,7 +178,7 @@ class Bansos extends CI_Controller
         // check is id array
         if (!is_array($id)) {
             $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">ID tidak valid!</div>');
-            redirect('bansos/proses?status='.$this->input->post('current_status'));
+            redirect($this->agent->referrer());
             return false;
         }
 

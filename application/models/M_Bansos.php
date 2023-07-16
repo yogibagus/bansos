@@ -78,6 +78,27 @@ class M_Bansos extends CI_Model
         return $this->db->get()->result();
     }
 
+    // get all data bansos
+    public function get_all_bansos_penyaluran($filter, $id_master_penyaluran)
+    {
+        // get all data but not in penyaluran with id_master_penyaluran
+        $this->db->select('tb_bansos.*, tb_master_bansos.nama as nama_master_bansos, tb_user.nama as nama_user, user_updated.nama as nama_user_updated');
+        $this->db->from('tb_bansos');
+        $this->db->join('tb_master_bansos', 'tb_master_bansos.id = tb_bansos.id_master_bansos', 'left');
+        $this->db->join('tb_user', 'tb_user.id = tb_bansos.created_by', 'left');
+        $this->db->join('tb_user as user_updated', 'user_updated.id = tb_bansos.updated_by', 'left');
+        // filter
+        foreach ($filter as $key => $value) {
+            if ($value != '') {
+                $this->db->like('tb_bansos.' . $key, $value);
+            }
+        }
+        $this->db->where('tb_bansos.is_deleted', 0);
+        $this->db->where('tb_bansos.id NOT IN (SELECT id_bansos FROM tb_penyaluran WHERE id_master_penyaluran = ' . $id_master_penyaluran . ')');
+        $this->db->order_by('tb_bansos.id', 'desc');
+        return $this->db->get()->result();
+    }
+
     // get data bansos by id
     public function get_bansos_by_id($id)
     {
