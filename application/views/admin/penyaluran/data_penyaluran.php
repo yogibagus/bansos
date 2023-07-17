@@ -5,19 +5,19 @@
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-md">
         <div class="modal-content bg-light">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalAddDataPenyaluranLabel">Kirim Data Bansos Ke CO Magang</h5>
+                <h5 class="modal-title" id="modalAddDataPenyaluranLabel">Tambah Data Bansos</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <div class="alert alert-info" role="alert">
-                        <strong>Perhatian!</strong> Pastikan data yang akan dikirim sudah benar.
+                        <strong>Perhatian!</strong> Pastikan data yang akan ditambahkan sudah benar.
                     </div>
-                    <p>Apakah anda yakin ingin mengirim data ini ke CO Magang?</p>
+                    <p>Apakah anda yakin ingin menambahkan data pada <b>Master Penyaluran</b> ini?</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-info" id="btn_send_data">Kirim Data <i
+                    <button type="submit" class="btn btn-info" id="btn_send_data">Tambah Data <i
                             class="fas fa-paper-plane    "></i></button>
                 </div>
             </div>
@@ -56,7 +56,7 @@
                             </select>
                         </div>
                         <!-- drop down status -->
-                        <div class="col-md-3 col-sm-6 col-12">
+                        <!-- <div class="col-md-3 col-sm-6 col-12">
                             <label for="">Status</label>
                             <select class="form-control form-control-sm" name="status" id="filter_status">
                                 <option value="" selected disabled>- Status -</option>
@@ -66,7 +66,7 @@
                                 <option value="2" <?= $filter["status"] == '2' ? 'selected' : '' ?>>Tidak Tersalur
                                 </option>
                             </select>
-                        </div>
+                        </div> -->
                         <div class="col-md-3 col-sm-6 col-12">
                             <label for="">Nama Penerima</label>
                             <input type="text" class="form-control form-control-sm" name="nama"
@@ -151,7 +151,9 @@
     <table class="table table-striped table-hover fw-bold" id="dataTables">
         <thead class="thead-inverse bg-dark text-white">
             <tr>
-                <th width="5%"></th>
+                <th width="5%" class="align-middle p-3">
+                    <input type="checkbox" class="form-check-input" name="" id="checkAll">
+                </th>
                 <th width="5%" class="text-center">No</th>
                 <th width="20%">Nama</th>
                 <th>Norek</th>
@@ -368,7 +370,13 @@
 <!-- config datatables -->
 <script>
     $(document).ready(function () {
-        $('#dataTables').DataTable({});
+        $('#dataTables').DataTable({
+            // row 1 prevent sorting
+            "aoColumnDefs": [{
+                'bSortable': false,
+                'aTargets': [0]
+            }],
+        });
     });
 </script>
 
@@ -433,6 +441,18 @@
             console.log("storedValues: " + storedValues);
             var checkedValues = [];
 
+            // check if checkedAllValues exists in local storage
+            var checkedAllValues = localStorage.getItem('checkAllValues<?= $id_master_penyaluran ?>');
+            console.log("checkedAllValues: " + checkedAllValues);
+
+            // check if checkedAllValues is true
+            if (checkedAllValues == 'true' || checkedAllValues == true) {
+                console.log("checkedAllValues == true");
+                $('#checkAll').prop('checked', true);
+                $('input[type="checkbox"]').prop('checked', true);
+            }
+
+            // Check if any previous checked values exist
             if (storedValues) {
                 checkedValues = JSON.parse(storedValues);
                 $.each(checkedValues, function (index, value) {
@@ -444,6 +464,11 @@
             // Event delegation for checkbox click
             $(document).on('click', 'input[type="checkbox"]', function () {
                 console.log("checkbox clicked");
+                // handle checkall
+                if ($(this).attr('id') == 'checkAll') {
+                    checkAllHandler(checkedValues);
+                    return;
+                }
                 if ($(this).is(':checked')) {
                     $('#checkAll').prop('checked', false);
                     if (!checkedValues.includes($(this).val())) {
@@ -459,20 +484,37 @@
                 updateCheckedValues(checkedValues);
 
                 // Save checked values to local storage
-                localStorage.setItem('checkedValues<?= $id_master_penyaluran ?>', JSON.stringify(
-                    checkedValues));
+                localStorage.setItem('checkedValues<?= $id_master_penyaluran ?>', JSON.stringify(checkedValues));
             });
-
-            function updateCheckedValues(values) {
-                $('#total_checked').html(" " + values.length);
-                $('#checked_list').val(JSON.stringify(values));
-                console.log(values);
-            }
 
             // Log all checked checkbox values
             console.log($('input[type="checkbox"]:checked').map(function () {
                 return this.value;
             }).get());
+        }
+
+        function updateCheckedValues(values) {
+            $('#total_checked').html(" " + values.length);
+            $('#checked_list').val(JSON.stringify(values));
+            console.log(values);
+        }
+
+        // function to handle checkall
+        function checkAllHandler(checkedValues) {
+            // // delete local storage
+            localStorage.removeItem('checkedValues<?= $id_master_penyaluran ?>');
+            // check if checked
+            if ($('#checkAll').is(':checked')) {
+                // check all checkbox
+                $('input[type="checkbox"]').prop('checked', true);
+                // set to local storage checkedAllValues
+                localStorage.setItem('checkAllValues<?= $id_master_penyaluran ?>', true);
+            } else {
+                // uncheck all checkbox
+                $('input[type="checkbox"]').prop('checked', false);
+                // set to local storage checkedAllValues
+                localStorage.setItem('checkAllValues<?= $id_master_penyaluran ?>', false);
+            }
         }
 
         // handle pagination click
@@ -483,6 +525,8 @@
             $('#dataTables').DataTable().page(page).draw('page');
             // call checkboxHandler()
             checkboxHandler();
+            // call checkAllHandler()
+            checkAllHandler();
         });
     });
 </script>
@@ -494,9 +538,14 @@
         $('#btn_send_data').click(function () {
             // get checked values
             var checkedValues = JSON.parse(localStorage.getItem('checkedValues<?= $id_master_penyaluran ?>'));
+            console.log("checkedValues", checkedValues);
+
+            // get checkedAllValues
+            var checkedAllValues = localStorage.getItem('checkAllValues<?= $id_master_penyaluran ?>');
+            console.log("checkedAllValues", checkedAllValues);
 
             // check if empty
-            if (checkedValues == '') {
+            if ((checkedValues == '' || checkedValues == null) && (checkedAllValues == '' || checkedAllValues == null)) {
                 // close modal
                 $('#modalAddDataPenyaluran').modal('hide');
                 // swall alert with button to reload page
@@ -510,18 +559,20 @@
                 return false;
             }
 
-            sendData(1, checkedValues);
+            addData(1, checkedValues);
         });
 
-        function sendData(status, checkedValues) {
+        function addData(status, checkedValues) {
             // close all modal
             $('#modalAddDataPenyaluran').modal('hide');
             $.ajax({
-                url: "<?= base_url('penyaluran/send_data_bansos/') ?>",
+                url: "<?= base_url('penyaluran/add_data_bansos/') ?>",
                 type: "POST",
                 data: {
                     checked_list: checkedValues,
-                    id_master_penyaluran: <?= $id_master_penyaluran ?>,
+                    id_master_penyaluran: <?=$id_master_penyaluran?> ,
+                    check_all: localStorage.getItem('checkAllValues<?= $id_master_penyaluran ?>'),
+                    filter: <?=json_encode($filter)?> ,
                 },
                 success: function (data) {
                     console.log(data);
@@ -531,7 +582,8 @@
                     if (data.status == true) {
                         // delete local storage
                         localStorage.removeItem('checkedValues<?= $id_master_penyaluran ?>');
-                        
+                        localStorage.removeItem('checkAllValues<?= $id_master_penyaluran ?>');
+
                         Swal.fire({
                             icon: 'success',
                             title: data.message,
@@ -542,7 +594,6 @@
                             location.reload();
                         });
                     } else {
-                        console.log("tes", data);
                         Swal.fire({
                             icon: 'error',
                             title: data.message,

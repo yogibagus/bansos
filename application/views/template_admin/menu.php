@@ -200,9 +200,9 @@
                     <div class="d-flex align-items-center gap-2 gap-lg-3">
                         <a href="#" class="btn btn-sm btn-flex btn-dark align-self-center px-3"
                             data-bs-toggle="modal" data-bs-target="#modalAddDataPenyaluran">
-                            <i class="fa fa-paper-plane fs-3" data-bs-toggle="tooltip" data-bs-placement="top"
+                            <i class="fa fa-plus fs-3" data-bs-toggle="tooltip" data-bs-placement="top"
                                 title="Kirim Data Ke CO Magang"></i>
-                                Kirim Data
+                                Tambah Data
                         </a>
                     </div>
                     <?php } ?>

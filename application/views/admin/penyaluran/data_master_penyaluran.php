@@ -39,12 +39,17 @@
     <table class="table table-striped table-hover fw-bold" id="dataTables">
         <thead class="thead-inverse bg-dark text-white">
             <tr>
-                <th class="text-center">No</th>
-                <th>Nama</th>
+                <th width="5%" class="text-center">No</th>
+                <th width="15%">Nama</th>
                 <th>CO Magang</th>
+                <th>Jumlah Data</th>
+                <th>Pending</th>
+                <th>Tersalur</th>
+                <th>Tidak Tersalur</th>
+                <th>Status</th>
                 <th>Dibuat Oleh</th>
-                <th width="15%">Tgl. Dibuat</th>
-                <th width="15%">Aksi</th>
+                <th width="10%">Tgl. Dibuat</th>
+                <th width="20%">Aksi</th>
             </tr>
         </thead>
         <tbody>
@@ -64,14 +69,42 @@
                         }
                     } ?>
                 </td>
+                <td class="align-middle text-center">
+                    <span class="badge badge-primary">
+                        <?= $value->jumlah_data_penyaluran ?>
+                    </span>
+                </td>
+                <td class="align-middle text-center">
+                    <span class="badge badge-dark">
+                        <?= $value->data_belum_disalurkan ?>
+                    </span>
+                <td class="align-middle text-center">
+                    <span class="badge badge-success">
+                        <?= $value->data_tersalur ?>
+                    </span>
+                </td>
+                <td class="align-middle text-center">
+                    <span class="badge badge-danger">
+                        <?= $value->data_tidak_tersalur ?>
+                    </span>
+                </td>
+                <td class="align-middle">
+                    <?php if ($value->status == 0) { ?>
+                    <span class="badge badge-dark">Draft</span>
+                    <?php } else if ($value->status == 1) { ?>
+                    <span class="badge badge-primary">In Progress</span>
+                    <?php } else if ($value->status == 2) { ?>
+                    <span class="badge badge-success">Selesai</span>
+                    <?php } ?>
+                </td>
                 <td class="align-middle"><?= $value->nama_user ?></td>
-                <!-- FORMAT TGL -->
                 <td class="align-middle">
                     <?= date_format(date_create($value->created_at), "d-m-Y H:i:s") ?>
                 </td>
                 <td>
                     <!-- Tambah Data Penyaluran -->
-                    <a type="button" class="btn btn-sm btn-icon btn-light-dark" id="btnTambahPenyaluran<?= $value->id ?>"
+                    <a type="button" class="btn btn-sm btn-icon btn-light-dark"
+                        id="btnTambahPenyaluran<?= $value->id ?>"
                         href="<?= base_url('penyaluran/data_bansos/' . $value->id) ?>">
                         <i class="fa fa-plus" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top"
                             title="Tambah Data Penyaluran"></i>
@@ -82,10 +115,50 @@
                         $(document).ready(function () {
                             $('#btnTambahPenyaluran<?= $value->id ?>').click(function () {
                                 localStorage.removeItem('checkedValues<?= $value->id ?>');
+                                localStorage.removeItem('checkedAllValues<?= $value->id ?>');
                                 console.log('removing checkedValues<?= $value->id ?>');
+                                console.log('removing checkedAllValues<?= $value->id ?>');
                             });
                         });
                     </script>
+
+                    
+                    <!-- Send Penyaluran Ke CO Magang-->
+                    <button type="button" class="btn btn-sm btn-icon btn-light-info" data-bs-toggle="modal"
+                        data-bs-target="#modalKirimData<?= $value->id ?>" <?= $value->status != 0 ? 'disabled' : '' ?>>
+                        <i class="fa fa-paper-plane" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top"
+                            title="Kirim Ke CO Magang"></i>
+                    </button>
+
+                    <!-- Modal Kirim Ke CO Magang -->
+                    <div class="modal fade" id="modalKirimData<?= $value->id ?>" tabindex="-1"
+                        aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="modalKirimData">Kirim Data Penyaluran -
+                                        <?= $value->nama ?>
+                                    </h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="alert alert-primary" role="alert">
+                                        <strong>Perhatian!</strong> Pastikan data yang akan dikirim sudah benar!
+                                    </div>
+                                    <p>Apa anda yakin ingin mengirim <b>Data Penyaluran</b> ini ke CO Magang?<br>
+                                    </p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Batal</button>
+                                    <a href="<?= base_url('penyaluran/send_data_penyaluran/' . $value->id) ?>"
+                                        class="btn btn-info"><i class="fa fa-paper-plane" aria-hidden="true"></i> Kirim Ke CO Magang</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
 
                     <!-- Detail Penyaluran -->
                     <a type="button" class="btn btn-sm btn-icon btn-light-success">
@@ -127,6 +200,21 @@
                                             <label for="edit_nama" class="form-label">Nama Master Penyaluran</label>
                                             <input type="text" class="form-control" id="edit_nama" name="nama"
                                                 value="<?= $value->nama ?>" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="add_nama" class="form-label">CO Magang </label>
+                                            <select class="form-select" aria-label="Default select example"
+                                                name="id_user" required>
+                                                <option value='' selected disabled>Pilih CO Magang</option>
+                                                <option value="-1" <?= $value->id_user == -1 ? 'selected' : '' ?>>
+                                                    Semua CO Magang</option>
+                                                <?php foreach ($user as $key => $arr) {?>
+                                                <option value="<?= $arr->id ?>"
+                                                    <?= $arr->id == $value->id_user ? 'selected' : '' ?>>
+                                                    <?= $arr->nama ?>
+                                                </option>
+                                                <?php } ?>
+                                            </select>
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary"

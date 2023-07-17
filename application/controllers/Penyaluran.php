@@ -55,7 +55,7 @@ class Penyaluran extends CI_Controller
 
         $this->M_Penyaluran->update_master_penyaluran($data);
         $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data berhasil ditambahkan!</div>');
-        redirect('penyaluran/data_master_penyaluran');
+            redirect($this->agent->referrer());
     }
 
     // update data master penyaluran
@@ -65,13 +65,14 @@ class Penyaluran extends CI_Controller
 
         $data = [
             'nama' => $nama,
+            'id_user' => $this->input->post('id_user'),
             'updated_by' => $this->id,
             'updated_at' => date('Y-m-d H:i:s')
         ];
 
         $this->M_Penyaluran->update_master_penyaluran($data, $id);
         $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data berhasil diupdate!</div>');
-        redirect('penyaluran/data_master_penyaluran');
+            redirect($this->agent->referrer());
     }
 
     // delete data master penyaluran
@@ -79,7 +80,21 @@ class Penyaluran extends CI_Controller
     {
         $this->M_Penyaluran->delete_master_penyaluran($id);
         $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data berhasil dihapus!</div>');
-        redirect('penyaluran/data_master_penyaluran');
+            redirect($this->agent->referrer());
+    }
+
+    // send data penyaluran
+    public function send_data_penyaluran($id)
+    {
+        $data = [
+            'status' => 1,
+            'updated_by' => $this->id,
+            'updated_at' => date('Y-m-d H:i:s')
+        ];
+
+        $this->M_Penyaluran->update_master_penyaluran($data, $id);
+        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data berhasil dikirim!</div>');
+            redirect($this->agent->referrer());
     }
 
     // get data bansos
@@ -116,8 +131,8 @@ class Penyaluran extends CI_Controller
         $this->load->view('template_admin/footer', $data);
     }
 
-    // send_data_bansos for ajax request
-    public function send_data_bansos()
+    // add_data_bansos for ajax request
+    public function add_data_bansos()
     {
         try {
             $id_master_penyaluran = $this->input->post('id_master_penyaluran');
@@ -127,15 +142,7 @@ class Penyaluran extends CI_Controller
                 $response['message'] = "Gagal mengirim data bansos!";
                 $response['status'] = false;
                 echo json_encode($response);
-            }
-    
-            $checked_list = $this->input->post('checked_list'); // id_bansos that checked
-            // check if checked_list is empty and array
-            if ($checked_list == '' || !is_array($checked_list)) {
-                $response['error'] = "checked_list kosong atau bukan array!";
-                $response['message'] = "Gagal mengirim data bansos!";
-                $response['status'] = false;
-                echo json_encode($response);
+                return false;
             }
     
             // get master penyaluran by id
@@ -146,19 +153,65 @@ class Penyaluran extends CI_Controller
                 $response['message'] = "Gagal mengirim data bansos!";
                 $response['status'] = false;
                 echo json_encode($response);
+                return false;
             }
-    
-            $tmp = [];
-            foreach ($checked_list as $key => $value) {
-                $tmp[] = [
-                    'id_master_penyaluran' => $id_master_penyaluran,
-                    'id_bansos' => $value,
-                    'created_by' => $this->id,
-                    'created_at' => date('Y-m-d H:i:s')
-                ];
+
+            $check_all = $this->input->post('check_all'); // check if all data is checked
+
+            // check if all data is checked
+            if($check_all == true){
+                $filter = $this->input->post('filter');
+                // get all data bansos
+                $data_bansos = $this->M_Bansos->get_all_bansos_penyaluran($filter, $id_master_penyaluran);
+                // check if data_bansos is empty
+                if ($data_bansos == '') {
+                    $response['error'] = "data_bansos kosong!";
+                    $response['message'] = "Gagal mengirim data bansos!";
+                    $response['status'] = false;
+                    echo json_encode($response);
+                    return false;
+                }
+
+                $tmp = [];
+                foreach ($data_bansos as $key => $value) {
+                    $tmp[] = [
+                        'id_master_penyaluran' => $id_master_penyaluran,
+                        'id_bansos' => $value->id,
+                        'created_by' => $this->id,
+                        'created_at' => date('Y-m-d H:i:s')
+                    ];
+                }
+
+                $check = $this->M_Penyaluran->bulk_insert_data_penyaluran($tmp);
+            }else if($check_all == false){
+                $checked_list = $this->input->post('checked_list'); // id_bansos that checked
+                // check if checked_list is empty and array
+                if ($checked_list == '' || !is_array($checked_list)) {
+                    $response['error'] = "checked_list kosong atau bukan array!";
+                    $response['message'] = "Gagal mengirim data bansos!";
+                    $response['status'] = false;
+                    echo json_encode($response);
+                    return false;
+                }
+        
+                $tmp = [];
+                foreach ($checked_list as $key => $value) {
+                    $tmp[] = [
+                        'id_master_penyaluran' => $id_master_penyaluran,
+                        'id_bansos' => $value,
+                        'created_by' => $this->id,
+                        'created_at' => date('Y-m-d H:i:s')
+                    ];
+                }
+        
+                $check = $this->M_Penyaluran->bulk_insert_data_penyaluran($tmp);
+            }else{
+                $response['error'] = "check_all kosong!";
+                $response['message'] = "Gagal mengirim data bansos!";
+                $response['status'] = false;
+                echo json_encode($response);
+                return false;
             }
-    
-            $check = $this->M_Penyaluran->bulk_insert_data_penyaluran($tmp);
     
             if ($check) {
                 $response['message'] = "Berhasil mengirim data bansos!";
