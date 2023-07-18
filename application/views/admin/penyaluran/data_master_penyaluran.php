@@ -161,7 +161,7 @@
 
 
                     <!-- Detail Penyaluran -->
-                    <a type="button" class="btn btn-sm btn-icon btn-light-success">
+                    <a type="button" class="btn btn-sm btn-icon btn-light-success" href="<?= base_url('penyaluran/detail_penyaluran/' . $value->id) ?>">
                         <i class="fa fa-external-link" aria-hidden="true" data-bs-toggle="tooltip"
                             data-bs-placement="top" title="Detail Penyaluran"></i>
                     </a>

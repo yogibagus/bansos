@@ -99,4 +99,73 @@ class M_Penyaluran extends CI_Model
             return false;
         }
     }
+
+    // get data penyaluran by id master penyaluran, with data bansos
+    public function get_data_penyaluran_by_id_master_penyaluran($filter, $filter_penyaluran)
+    {
+        // get all data penyaluran by id master penyaluran
+        $this->db->select('
+        tb_penyaluran.id,
+        tb_penyaluran.id_master_penyaluran,
+        tb_penyaluran.id_bansos,
+        tb_penyaluran.status as status_penyaluran,
+        tb_penyaluran.created_at as created_at_penyaluran,
+        tb_penyaluran.updated_at as updated_at_penyaluran,
+        tb_penyaluran.created_by as created_by_penyaluran,
+        tb_penyaluran.updated_by as updated_by_penyaluran,
+        tb_user.nama as user_created,
+        tb_user.nama as user_updated,
+        tb_bansos.nama,
+        tb_bansos.norek,
+        tb_bansos.nik,
+        tb_bansos.tahun,
+        tb_bansos.jenis_bansos,
+        tb_bansos.kabupaten,
+        tb_bansos.kecamatan,
+        tb_bansos.kelurahan
+        ');
+        $this->db->from('tb_penyaluran');
+        $this->db->join('tb_bansos', 'tb_bansos.id = tb_penyaluran.id_bansos');
+        $this->db->join('tb_user', 'tb_user.id = tb_penyaluran.created_by');
+        $this->db->join('tb_user as user_updated', 'user_updated.id = tb_penyaluran.updated_by', 'left');
+        
+        // filter_penyaluran
+        if(!empty($filter_penyaluran)){
+            foreach ($filter_penyaluran as $key => $value) {
+                if($value != ''){
+                    $this->db->where('tb_penyaluran.'.$key, $value);
+                }
+            }
+        }
+
+        // filter bansos
+        if(!empty($filter)){
+            foreach ($filter as $key => $value) {
+                if($value != ''){
+                    $this->db->where('tb_bansos.'.$key, $value);
+                }
+            }
+        }
+
+        // echo $this->db->last_query();die;
+        $this->db->where('tb_penyaluran.is_deleted', 0);
+        $this->db->where('tb_bansos.is_deleted', 0);
+        $this->db->order_by('tb_penyaluran.id', 'desc');
+        $data_penyaluran = $this->db->get()->result();
+        // print query
+        return $data_penyaluran;
+    }
+
+    // update data penyaluran
+    public function update_data_penyaluran($data, $id = '')
+    {
+        if ($id == '') {
+            // new insert
+            $this->db->insert('tb_penyaluran', $data);
+        } else {
+            // update
+            $this->db->where('id', $id);
+            $this->db->update('tb_penyaluran', $data);
+        }
+    }
 }

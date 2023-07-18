@@ -79,7 +79,7 @@ class M_Bansos extends CI_Model
     }
 
     // get all data bansos
-    public function get_all_bansos_penyaluran($filter, $id_master_penyaluran, $in = false)
+    public function get_all_bansos_penyaluran($filter, $id_master_penyaluran)
     {
         // get all data but not in penyaluran with id_master_penyaluran
         $this->db->select('tb_bansos.*, tb_master_bansos.nama as nama_master_bansos, tb_user.nama as nama_user, user_updated.nama as nama_user_updated');
@@ -97,15 +97,9 @@ class M_Bansos extends CI_Model
             }
         }
 
-        if($in){
-            $in = "IN";
-        }else{
-            $in = "NOT IN";
-        }
-
         // echo json_encode($in);die;
         $this->db->where('tb_bansos.is_deleted', 0);
-        $this->db->where('tb_bansos.id ' . $in . ' (SELECT id_bansos FROM tb_penyaluran WHERE id_master_penyaluran = ' . $id_master_penyaluran . ')');
+        $this->db->where("tb_bansos.id NOT IN (SELECT id_bansos FROM tb_penyaluran WHERE id_master_penyaluran = $id_master_penyaluran AND is_deleted = 0 AND status != 2)");
         $this->db->order_by('tb_bansos.id', 'desc');
         return $this->db->get()->result();
     }

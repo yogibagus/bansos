@@ -97,6 +97,60 @@ class Penyaluran extends CI_Controller
             redirect($this->agent->referrer());
     }
 
+    // detail penyaluran, show all penyaluran by id master penyaluran
+    public function detail_penyaluran($id_master_penyaluran)
+    {
+        // get master penyaluran by id
+        $data["title"] = $this->M_Penyaluran->get_master_penyaluran_by_id($id_master_penyaluran)->nama;
+
+        $data['id_master_penyaluran'] = $id_master_penyaluran;
+
+        $filter = [
+            'nama' => $this->input->post('nama') ?? null,
+            'nik' => $this->input->post('nik') ?? null,
+            'norek' => $this->input->post('norek') ?? null,
+            'status' => $this->input->post('status') ?? null,
+            // 'id_master_bansos' => $this->input->post('id') ?? null,
+            'tahun' => $this->input->post('tahun') ?? null,
+            'jenis_bansos' => $this->input->post('jenis_bansos') ?? null,
+            'status' => $this->input->post('status') ?? null,
+            'kabupaten' => $this->input->post('kabupaten'),
+            'kecamatan' => $this->input->post('kecamatan'),
+            'kelurahan' => $this->input->post('kelurahan'),
+        ];
+        $data["filter"] = $filter;
+
+        // filter master
+        $filter_master = [
+            'id_master_penyaluran' => $id_master_penyaluran,
+            'status' => $this->input->post('master_status') ?? null,
+        ];
+        $data["filter_master"] = $filter_master;
+
+        $data["data"] = $this->M_Penyaluran->get_data_penyaluran_by_id_master_penyaluran($filter, $filter_master);
+        
+        // echo json_encode($data);die;
+
+        $this->load->view('template_admin/meta', $data);
+        $this->load->view('template_admin/header', $data);
+        $this->load->view('template_admin/menu', $data);
+        $this->load->view('admin/penyaluran/detail_penyaluran', $data);
+        $this->load->view('template_admin/footer', $data);
+    }
+
+    // delete data penyaluran
+    public function delete_data_penyaluran($id)
+    {
+        $data = [
+            'is_deleted' => 1,
+            'updated_at' => date('Y-m-d H:i:s'),
+            'updated_by' => $this->id,
+        ];
+        $this->M_Penyaluran->update_data_penyaluran($data, $id);
+        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data berhasil dihapus!</div>');
+        redirect($this->agent->referrer());
+    }
+
     // get data bansos
     public function data_bansos($id_master_penyaluran)
     {
