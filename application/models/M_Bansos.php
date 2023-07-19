@@ -87,8 +87,8 @@ class M_Bansos extends CI_Model
         $this->db->join('tb_master_bansos', 'tb_master_bansos.id = tb_bansos.id_master_bansos', 'left');
         $this->db->join('tb_user', 'tb_user.id = tb_bansos.created_by', 'left');
         $this->db->join('tb_user as user_updated', 'user_updated.id = tb_bansos.updated_by', 'left');
-        // filter
-        // check if filter is not empty
+
+        // filter & check if filter is not empty
         if(!empty($filter)){
             foreach ($filter as $key => $value) {
                 if ($value != '') {
@@ -99,9 +99,27 @@ class M_Bansos extends CI_Model
 
         // echo json_encode($in);die;
         $this->db->where('tb_bansos.is_deleted', 0);
-        $this->db->where("tb_bansos.id NOT IN (SELECT id_bansos FROM tb_penyaluran WHERE id_master_penyaluran = $id_master_penyaluran AND is_deleted = 0 AND status != 2)");
+        $this->db->where("tb_bansos.id NOT IN (SELECT id_bansos FROM tb_penyaluran WHERE is_deleted = 0 AND status != 2)", NULL, FALSE);
         $this->db->order_by('tb_bansos.id', 'desc');
-        return $this->db->get()->result();
+        $data = $this->db->get()->result();
+        
+        // remove data bansos if status 2 (tidak tersalur) by id_master_penyaluran
+        if(!empty($data)){
+            foreach ($data as $key => $value) {
+                $this->db->select('count(id) as jumlah');
+                $this->db->from('tb_penyaluran');
+                $this->db->where('id_master_penyaluran', $id_master_penyaluran);
+                $this->db->where('id_bansos', $value->id);
+                $this->db->where('status', 2);
+                $this->db->where('is_deleted', 0);
+                $tidak_tersalur = $this->db->get()->row();
+                if($tidak_tersalur->jumlah > 0){
+                    unset($data[$key]);
+                }
+            }
+        }
+
+        return $data;
     }
 
     // get data bansos by id

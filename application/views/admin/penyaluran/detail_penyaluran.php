@@ -134,7 +134,7 @@
 
 <div class="card container p-5">
     <div>
-        <h5 class="mt-3">Total Data: <?= count($data) ?><br><span>Data Dipilih:<span id="total_checked">
+        <h5 class="mt-3">Total Data: <span id="total_data"><?= count($data) ?></span><br><span>Data Dipilih:<span id="total_checked">
                     0</span></span></h5>
     </div>
     <table class="table table-striped table-hover fw-bold" id="dataTables">
@@ -373,11 +373,15 @@
                 $('input[type="checkbox"]').prop('checked', true);
                 // set to local storage checkedAllValues
                 localStorage.setItem('checkAllValuesDetail<?= $id_master_penyaluran ?>', true);
+                // get value from #total_data and set to #total_checked
+                $('#total_checked').html(" " + $('#total_data').html());
             } else {
                 // uncheck all checkbox
                 $('input[type="checkbox"]').prop('checked', false);
                 // set to local storage checkedAllValues
                 localStorage.setItem('checkAllValuesDetail<?= $id_master_penyaluran ?>', false);
+                // set to 0 #total_checked
+                $('#total_checked').html(" 0");
             }
         }
 
