@@ -24,6 +24,10 @@ class Beritaacara extends CI_Controller
         //         redirect('');
         //     }
         // }
+
+        // get notif
+        $this->load->model('M_Notif');
+        $this->data['notif'] = $this->M_Notif->get_all_notif_by_id_user($this->id);
     }
 
     public function index(){
@@ -34,6 +38,7 @@ class Beritaacara extends CI_Controller
     {
         $data["data"] = $this->M_Beritaacara->get_all_berita_acara();
         $data['provinsi'] = $this->M_Wilayah->get_all_provinsi();
+        $data["notif"] = $this->data['notif'];
         $this->load->view('template_admin/meta', $data);
         $this->load->view('template_admin/header', $data);
         $this->load->view('template_admin/menu', $data);
@@ -49,6 +54,7 @@ class Beritaacara extends CI_Controller
         $data['kabupaten'] = $this->M_Wilayah->get_kabupaten_by_id_provinsi($data['data']->id_provinsi);
         $data['kecamatan'] = $this->M_Wilayah->get_kecamatan_by_id_kabupaten($data['data']->id_kabupaten);
         $data['kelurahan'] = $this->M_Wilayah->get_kelurahan_by_id_kecamatan($data['data']->id_kecamatan);
+        $data["notif"] = $this->data['notif'];
         $this->load->view('template_admin/meta', $data);
         $this->load->view('template_admin/header', $data);
         $this->load->view('template_admin/menu', $data);

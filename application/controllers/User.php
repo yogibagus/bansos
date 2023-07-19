@@ -25,6 +25,10 @@ class User extends CI_Controller
                 echo "<script>window.history.back();</script>";
             }
         }
+
+        // get notif
+        $this->load->model('M_Notif');
+        $this->data['notif'] = $this->M_Notif->get_all_notif_by_id_user($this->id);
     }
 
     public function index(){
@@ -34,6 +38,7 @@ class User extends CI_Controller
     public function data_user()
     {
         $data['users'] = $this->M_User->get_all_users();
+        $data["notif"] = $this->data['notif'];
         $this->load->view('template_admin/meta', $data);
         $this->load->view('template_admin/header', $data);
         $this->load->view('template_admin/menu', $data);
@@ -56,7 +61,7 @@ class User extends CI_Controller
         // simpan di database
         $this->M_User->update_user($data);
         $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Berhasil menbambah data user baru!</div>');
-        redirect('user/data_user');
+        redirect($this->agent->referrer());
     }
 
     // update user
@@ -83,10 +88,10 @@ class User extends CI_Controller
         $delete = $this->M_User->delete_user($id);
         if ($delete) {
             $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Berhasil menghapus data user!</div>');
-            redirect('user/data_user');
+            redirect($this->agent->referrer());
         } else {
             $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Gagal menghapus data user!</div>');
-            redirect('user/data_user');
+            redirect($this->agent->referrer());
         }
     }
 }

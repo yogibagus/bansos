@@ -7,7 +7,7 @@ class Penyaluran extends CI_Controller
     {
         parent::__construct();
         $this->load->model(['M_User', 'M_Penyaluran', 'M_Bansos']);
-        $this->load->library('Excel');
+        $this->load->library(['Excel', 'Notif']);
         // get session
         $this->id = $this->session->userdata('id');
         $this->role = $this->session->userdata('role');
@@ -25,6 +25,10 @@ class Penyaluran extends CI_Controller
             //     redirect('');
             // }
         }
+
+        // get notif
+        $this->load->model('M_Notif');
+        $this->data['notif'] = $this->M_Notif->get_all_notif_by_id_user($this->id);
     }
 
     public function index(){
@@ -35,7 +39,7 @@ class Penyaluran extends CI_Controller
     {
         $data["data"] = $this->M_Penyaluran->get_all_master_penyaluran();
         $data["user"] = $this->M_User->get_user_by_role(4); // get all user CO Magang
-        // echo json_encode($data);die;
+        $data["notif"] = $this->data['notif'];
         $this->load->view('template_admin/meta', $data);
         $this->load->view('template_admin/header', $data);
         $this->load->view('template_admin/menu', $data);
@@ -93,8 +97,13 @@ class Penyaluran extends CI_Controller
         ];
 
         $this->M_Penyaluran->update_master_penyaluran($data, $id);
+
+        // send notification to user assigned
+        $id_user = $this->M_Penyaluran->get_master_penyaluran_by_id($id)->id_user;
+        $this->notif->create_notif($id_user, 'Ada tugas penyaluran baru!', 'Anda mendapatkan tugas penyaluran baru dari ' . $this->nama, 'penyaluran co magang', $id);
+        
         $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data berhasil dikirim!</div>');
-            redirect($this->agent->referrer());
+        redirect($this->agent->referrer());
     }
 
     // detail penyaluran, show all penyaluran by id master penyaluran
@@ -130,7 +139,7 @@ class Penyaluran extends CI_Controller
         $data["data"] = $this->M_Penyaluran->get_data_penyaluran_by_id_master_penyaluran($filter, $filter_master);
         
         // echo json_encode($data);die;
-
+        $data["notif"] = $this->data['notif'];
         $this->load->view('template_admin/meta', $data);
         $this->load->view('template_admin/header', $data);
         $this->load->view('template_admin/menu', $data);
@@ -178,6 +187,7 @@ class Penyaluran extends CI_Controller
 
         $data["data"] = $this->M_Bansos->get_all_bansos_penyaluran($filter, $id_master_penyaluran);
 
+        $data["notif"] = $this->data['notif'];
         $this->load->view('template_admin/meta', $data);
         $this->load->view('template_admin/header', $data);
         $this->load->view('template_admin/menu', $data);

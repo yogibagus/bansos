@@ -24,6 +24,10 @@ class Dashboard extends CI_Controller
         //         redirect('');
         //     }
         // }
+
+        // get notif
+        $this->load->model('M_Notif');
+        $this->data['notif'] = $this->M_Notif->get_all_notif_by_id_user($this->id);
     }
 
     public function index(){
@@ -33,6 +37,7 @@ class Dashboard extends CI_Controller
     public function dashboard_utama()
     {
         $data["test"] = "test";
+        $data["notif"] = $this->data['notif'];
         $this->load->view('template_admin/meta', $data);
         $this->load->view('template_admin/header', $data);
         $this->load->view('template_admin/menu', $data);
@@ -44,12 +49,12 @@ class Dashboard extends CI_Controller
     public function profile()
     {
         $data['user'] = $this->M_User->get_user_by_id($this->id);
+        $data["notif"] = $this->data['notif'];
         $this->load->view('template_admin/meta', $data);
         $this->load->view('template_admin/header', $data);
         $this->load->view('template_admin/menu', $data);
         $this->load->view('admin/profile', $data);
         $this->load->view('template_admin/footer', $data);
-        
         return $data;
     }
 
@@ -66,6 +71,6 @@ class Dashboard extends CI_Controller
         // simpan di database
         $this->M_User->update_user($data, $id);
         $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Berhasil mengubah data profile!</div>');
-        redirect('dashboard/profile');
+        redirect($this->agent->referrer());
     }
 }

@@ -25,6 +25,10 @@ class Bansos extends CI_Controller
                 redirect('');
             }
         }
+
+        // get notif
+        $this->load->model('M_Notif');
+        $this->data['notif'] = $this->M_Notif->get_all_notif_by_id_user($this->id);
     }
 
     public function index(){
@@ -33,6 +37,7 @@ class Bansos extends CI_Controller
 
     public function data_master_bansos()
     {
+        $data["notif"] = $this->data['notif'];
         $data["data"] = $this->M_Bansos->get_all_master_bansos();
         $this->load->view('template_admin/meta', $data);
         $this->load->view('template_admin/header', $data);
@@ -82,28 +87,29 @@ class Bansos extends CI_Controller
     // get all data bansos
     public function all()
     {
-            $data["title"] = "Data Bansos";
+        $data["title"] = "Data Bansos";
 
-            $data["master_bansos"] = $this->M_Bansos->get_all_master_bansos();
+        $data["master_bansos"] = $this->M_Bansos->get_all_master_bansos();
 
-            $filter = [
-                'nama' => $this->input->post('nama') ?? null,
-                'nik' => $this->input->post('nik') ?? null,
-                'norek' => $this->input->post('norek') ?? null,
-                'status' => $this->input->post('status') ?? null,
-                'id_master_bansos' => $this->input->post('id') ?? null,
-                'tahun' => $this->input->post('tahun') ?? null,
-                'jenis_bansos' => $this->input->post('jenis_bansos') ?? null,
-                'status' => $this->input->post('status') ?? null,
-                'kabupaten' => $this->input->post('kabupaten'),
-                'kecamatan' => $this->input->post('kecamatan'),
-                'kelurahan' => $this->input->post('kelurahan'),
-            ];
-            $data["filter"] = $filter;
-            // log
-            // echo json_encode($filter);die;
-            $data["data"] = $this->M_Bansos->get_all_bansos($filter);
+        $filter = [
+            'nama' => $this->input->post('nama') ?? null,
+            'nik' => $this->input->post('nik') ?? null,
+            'norek' => $this->input->post('norek') ?? null,
+            'status' => $this->input->post('status') ?? null,
+            'id_master_bansos' => $this->input->post('id') ?? null,
+            'tahun' => $this->input->post('tahun') ?? null,
+            'jenis_bansos' => $this->input->post('jenis_bansos') ?? null,
+            'status' => $this->input->post('status') ?? null,
+            'kabupaten' => $this->input->post('kabupaten'),
+            'kecamatan' => $this->input->post('kecamatan'),
+            'kelurahan' => $this->input->post('kelurahan'),
+        ];
+        $data["filter"] = $filter;
+        // log
+        // echo json_encode($filter);die;
+        $data["data"] = $this->M_Bansos->get_all_bansos($filter);
 
+        $data["notif"] = $this->data['notif'];
         $this->load->view('template_admin/meta', $data);
         $this->load->view('template_admin/header', $data);
         $this->load->view('template_admin/menu', $data);

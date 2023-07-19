@@ -45,6 +45,89 @@
 
                             <!--begin::User menu-->
                             <div class="app-navbar-item ms-1 ms-lg-4" id="kt_header_user_menu_toggle">
+
+                                <!--begin::Notifications-->
+                                <div class="app-navbar-item ms-1 ms-lg-4">
+                                    <!--begin::Menu- wrapper-->
+                                    <div class="btn btn-icon btn-light-dark position-relative me-5"
+                                        data-kt-menu-trigger="{default: 'click', lg: 'hover'}"
+                                        data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end">
+                                        <i class="fa fa-bell" aria-hidden="true"></i>
+                                        <span
+                                            class="position-absolute top-0 start-100 translate-middle badge badge-circle badge-primary">
+                                            <?php $total=0;foreach ($notif as $n) :
+                                                if ($n->is_read == 0) {
+                                                    $total = $total + 1;
+                                                }
+                                            endforeach;
+                                            echo $total;
+                                            ?>
+                                        </span>
+                                    </div>
+
+                                    <!--begin::Menu-->
+                                    <div class="menu menu-sub menu-sub-dropdown menu-column w-350px w-lg-375px"
+                                        data-kt-menu="true" id="kt_menu_notifications">
+                                        <!-- begin::Heading-->
+                                        <div class="d-flex flex-column bgi-no-repeat rounded-top"
+                                            style="background-image:url('/metronic8/demo44/assets/media/misc/menu-header-bg.jpg')">
+                                            <!--begin::Title-->
+                                            <h3 class="text-white fw-semibold px-9 mt-10 mb-6">
+                                                Notifications
+                                            </h3>
+                                            <!--end::Title-->
+                                        </div>
+                                        <!--end::Heading -->
+
+                                        <!--begin::Tab content-->
+                                        <div class="tab-content">
+                                            <!--begin::Tab panel-->
+                                            <div class="tab-pane fade show active" id="kt_topbar_notifications_1"
+                                                role="tabpanel">
+                                                <!--begin::Items-->
+                                                <div class="scroll-y mh-325px p-3">
+                                                    <!--begin::Item-->
+                                                    <?php foreach ($notif as $n) : ?>
+                                                    <div class="card text-left p-3 mb-3 <?php if ($n->is_read == 0) { echo 'bg-light-primary';} ?>">
+                                                        <div class="align-items-center">
+                                                            <div class="mb-0 me-2">
+                                                                <a href="<?= base_url() ?>notification/read/<?= $n->id ?>"
+                                                                    class="fs-6 text-gray-800 text-hover-primary fw-bold">
+                                                                    <?= $n->judul ?>
+                                                                </a>
+                                                                <div class="text-gray-600 fs-7"><?= $n->pesan ?></div>
+                                                            </div>
+                                                            <span
+                                                                class="badge badge-light-primary"><?php echo date('d M Y h:i', strtotime($n->created_at)); ?></span>
+                                                            <span class="badge badge-light-info text-uppercase"><?= $n->jenis ?></span>
+                                                            <?php if ($n->is_read == 0) : ?>
+                                                            <span class="badge badge-danger float-end">NEW!</span><br>
+                                                            <?php endif; ?>
+                                                        </div>
+                                                    </div>
+                                                    <?php endforeach; ?>
+                                                    <!--end::Item-->
+                                                </div>
+                                                <!--end::Items-->
+
+                                                <!--begin::View more-->
+                                                <!-- <div class="py-3 text-center border-top">
+                                                    <a href="/metronic8/demo44/../demo44/pages/user-profile/activity.html"
+                                                        class="btn btn-color-gray-600 btn-active-color-primary">
+                                                        View All
+                                                        <i class="ki-outline ki-arrow-right fs-5"></i> </a>
+                                                </div> -->
+                                                <!--end::View more-->
+                                            </div>
+                                            <!--end::Tab panel-->
+                                        </div>
+                                        <!--end::Tab content-->
+                                    </div>
+                                    <!--end::Menu-->
+                                    <!--end::Menu wrapper-->
+                                </div>
+                                <!--end::Notifications-->
+
                                 <!--begin::Menu wrapper-->
                                 <div class="cursor-pointer symbol symbol-35px symbol-md-40px"
                                     data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-attach="parent"
@@ -70,14 +153,13 @@
                                                 <div class="fw-bold d-flex align-items-center fs-5 text-capitalize">
                                                     <!-- get nama from session -->
                                                     <?= $this->session->userdata('nama'); ?>
-                                                    <span
-                                                        class="badge badge-light-success fw-bold fs-8 px-2 py-1 ms-2">
+                                                    <span class="badge badge-light-success fw-bold fs-8 px-2 py-1 ms-2">
                                                         Super Admin
                                                     </span>
                                                 </div>
 
                                                 <a href="#" class="fw-semibold text-muted text-hover-primary fs-7">
-                                                <?= $this->session->userdata('email'); ?> </a>
+                                                    <?= $this->session->userdata('email'); ?> </a>
                                             </div>
                                             <!--end::Username-->
                                         </div>
@@ -104,8 +186,7 @@
 
                                     <!--begin::Menu item-->
                                     <div class="menu-item px-5">
-                                        <a href="<?= base_url() ?>login/logout" id="btnLogout"
-                                            class="menu-link px-5">
+                                        <a href="<?= base_url() ?>login/logout" id="btnLogout" class="menu-link px-5">
                                             Sign Out
                                         </a>
                                     </div>
