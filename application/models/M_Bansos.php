@@ -57,6 +57,11 @@ class M_Bansos extends CI_Model
         ];
         $this->db->where('id', $id);
         $this->db->update('tb_master_bansos', $data);
+        if ($this->db->affected_rows() > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     // get all data bansos
