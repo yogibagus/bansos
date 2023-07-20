@@ -103,12 +103,12 @@
                 </td>
                 <td>
                     <!-- Tambah Data Penyaluran -->
-                    <button type="button" class="btn btn-sm btn-icon btn-light-dark"
+                    <a type="button" class="btn btn-sm btn-icon btn-light-dark  <?= $value->status != 0 ? 'disabled' : '' ?>"
                         id="btnTambahPenyaluran<?= $value->id ?>"
-                        href="<?= base_url('penyaluran/data_bansos/' . $value->id) ?>" <?= $value->status != 0 ? 'disabled' : '' ?>>
+                        href="<?= base_url('penyaluran/data_bansos/' . $value->id) ?>">
                         <i class="fa fa-plus" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top"
                             title="Tambah Data Penyaluran"></i>
-                    </button>
+                    </a>
 
                     <!-- script to delete local storage checkedValues value->id -->
                     <script>
