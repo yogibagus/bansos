@@ -46,7 +46,7 @@ class Login extends CI_Controller
                 $this->session->set_userdata($sessiondata);
                 $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Anda telah berhasil login!</div>');
 
-                redirect('dashboard');
+                redirect('user/data_user');
             } else if ($user->role == 2) { // Penyelia
                 $sessiondata = array(
                     'id' => $user->id,
@@ -61,7 +61,7 @@ class Login extends CI_Controller
 
                 //set log
                 //activity_log("Auth", "Logged-in");
-                redirect('dashboard');
+                redirect('bansos/data_master_bansos');
             } else if ($user->role == 3) { // PIC
                 $sessiondata = array(
                     'id' => $user->id,
@@ -76,7 +76,7 @@ class Login extends CI_Controller
 
                 //set log
                 //activity_log("Auth", "Logged-in");
-                redirect('dashboard');
+                redirect('penyaluran/data_master_penyaluran');
             } else if ($user->role == 4) { // CO Magang
                 $sessiondata = array(
                     'id' => $user->id,
@@ -91,7 +91,7 @@ class Login extends CI_Controller
 
                 //set log
                 //activity_log("Auth", "Logged-in");
-                redirect('dashboard');
+                redirect('penyaluran/data_master_penyaluran');
             } else {
                 $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Email atau password salah!</div>');
                 redirect('login');
