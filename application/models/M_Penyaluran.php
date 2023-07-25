@@ -27,6 +27,8 @@ class M_Penyaluran extends CI_Model
             // get id user
             $id_user = $this->session->userdata('id');
             $this->db->where('tb_master_penyaluran.id_user', $id_user);
+            // check status 1 or 2 with query or
+            $this->db->where('tb_penyaluran.status = 1 OR tb_penyaluran.status = 2');
         }
         
 
