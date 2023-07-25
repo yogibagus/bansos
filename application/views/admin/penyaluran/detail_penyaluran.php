@@ -49,10 +49,13 @@
                             <label for="">Status</label>
                             <select class="form-control form-control-sm" name="master_status" id="filter_status">
                                 <option value="" selected disabled>- Status -</option>
-                                <option value="0" <?= $filter_master["status"] == '0' ? 'selected' : '' ?>>Belum Tersalur
+                                <option value="0" <?= $filter_master["status"] == '0' ? 'selected' : '' ?>>Belum
+                                    Tersalur
                                 </option>
-                                <option value="1" <?= $filter_master["status"] == '1' ? 'selected' : '' ?>>Tersalur</option>
-                                <option value="2" <?= $filter_master["status"] == '2' ? 'selected' : '' ?>>Tidak Tersalur
+                                <option value="1" <?= $filter_master["status"] == '1' ? 'selected' : '' ?>>Tersalur
+                                </option>
+                                <option value="2" <?= $filter_master["status"] == '2' ? 'selected' : '' ?>>Tidak
+                                    Tersalur
                                 </option>
                             </select>
                         </div>
@@ -133,9 +136,73 @@
 </div> -->
 
 <div class="card container p-5">
-    <div>
-        <h5 class="mt-3">Total Data: <span id="total_data"><?= count($data) ?></span><br><span>Data Dipilih:<span id="total_checked">
-                    0</span></span></h5>
+    <div class="d-flex justify-content-between">
+        <div>
+            <h5 class="mt-3">Total Data: <span id="total_data"><?= count($data) ?></span><br><span>Data Dipilih:<span
+                        id="total_checked">
+                        0</span></span></h5>
+        </div>
+        <div>
+            <?php 
+            // check if user is super admin or role is 4
+            if (($this->session->userdata('is_super_admin') || $this->session->userdata('role') == 4) && $status == 1) { ?>
+                <a type="button" class="btn btn-sm btn-success mt-3" data-bs-toggle="modal" 
+                    data-bs-target="#modalTersalur">Tersalur</a>
+
+                <!-- modal tersalur confirmation-->
+                <div class="modal fade" id="modalTersalur" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modalTersalur">Konfirmasi Tersalur</h5>
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="alert alert-danger" role="alert">
+                                    <strong>Penting!</strong> Data yang sudah tersalur tidak dapat dikembalikan lagi.
+                                </div>
+                                <p>Apakah anda yakin ingin mengubah status data yang dipilih menjadi <b>Tersalur</b>?</p>
+                                <br>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                <button type="submit" id="btn_send_data_tersalur" class="btn btn-success">Simpan <i
+                                        class="fas fa-save"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="button" class="btn btn-sm btn-danger mt-3" data-bs-toggle="modal"
+                    data-bs-target="#modalTidakTersalur">Tidak Tersalur</button>
+
+                <!-- modal tidak tersalur confirmation-->
+                <div class="modal fade" id="modalTidakTersalur" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modalTidakTersalur">Konfirmasi Tidak Tersalur</h5>
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="alert alert-danger" role="alert">
+                                    <strong>Penting!</strong> Data yang sudah tersalur tidak dapat dikembalikan lagi.
+                                </div>
+                                <p>Apakah anda yakin ingin mengubah status data yang dipilih menjadi <b>Tidak
+                                        Tersalur</b>?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                <button type="submit" id="btn_send_data_tidak_tersalur" class="btn btn-danger">Simpan <i
+                                        class="fas fa-save"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+            <?php } ?>
+        </div>
     </div>
     <table class="table table-striped table-hover fw-bold" id="dataTables">
         <thead class="thead-inverse bg-dark text-white">
@@ -189,6 +256,9 @@
                     <?= date_format(date_create($value->created_at_penyaluran), "d-m-Y H:i:s") ?>
                 </td>
                 <td>
+                    <?php
+                    // check if user is super admin or role is 4
+                    if (($this->session->userdata('is_super_admin') || $this->session->userdata('role') == 3) && $status == 0) { ?>
                     <!-- Delete Bansos -->
                     <a type="button" class="btn btn-sm btn-icon btn-light-danger" data-bs-toggle="modal"
                         data-bs-target="#modalDeleteMasterBansos<?= $value->id ?>">
@@ -224,6 +294,7 @@
                             </div>
                         </div>
                     </div>
+                    <?php } ?>
                 </td>
             </tr>
             <?php $no++; } ?>
@@ -402,8 +473,20 @@
 <!-- send data to CO Magang -->
 <script>
     $(document).ready(function () {
+        // handle button send data
+        $('#btn_send_data_tersalur').click(function () {
+            // call function process
+            process(1);
+        });
+
+        // handle button send data
+        $('#btn_send_data_tidak_tersalur').click(function () {
+            // call function process
+            process(2);
+        });
+
         // submit data
-        $('#btn_send_data').click(function () {
+        function process(paramStatus) {
             // get checked values
             var checkedValuesDetail = JSON.parse(localStorage.getItem('checkedValuesDetail<?= $id_master_penyaluran ?>'));
             console.log("checkedValuesDetail", checkedValuesDetail);
@@ -413,9 +496,9 @@
             console.log("checkedAllValues", checkedAllValues);
 
             // check if empty
-            if ((checkedValuesDetail == '' || checkedValuesDetail == null) && (checkedAllValues == '' || checkedAllValues == null)) {
-                // close modal
-                $('#modalAddDataPenyaluran').modal('hide');
+            if ((checkedValuesDetail == '' || checkedValuesDetail == null) && (checkedAllValues == 'false' || checkedAllValues == null)) {
+                // dismis all modal
+                $('.modal').modal('hide');
                 // swall alert with button to reload page
                 Swal.fire({
                     title: 'Gagal!',
@@ -427,17 +510,18 @@
                 return false;
             }
 
-            addData(1, checkedValuesDetail);
-        });
+            addData(1, checkedValuesDetail, paramStatus);
+        }
 
-        function addData(status, checkedValuesDetail) {
+        function addData(status, checkedValuesDetail, paramStatus){
             // close all modal
-            $('#modalAddDataPenyaluran').modal('hide');
+            $('.modal').modal('hide');
             $.ajax({
-                url: "<?= base_url('penyaluran/add_data_bansos/') ?>",
+                url: "<?= base_url('penyaluran/update_data_bansos/') ?>",
                 type: "POST",
                 data: {
                     checked_list: checkedValuesDetail,
+                    status_data: paramStatus,
                     id_master_penyaluran: <?=$id_master_penyaluran?> ,
                     check_all: localStorage.getItem('checkAllValuesDetail<?= $id_master_penyaluran ?>'),
                     filter: <?=json_encode($filter)?> ,

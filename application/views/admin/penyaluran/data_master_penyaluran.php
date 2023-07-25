@@ -126,10 +126,31 @@
                         </script>
                     <?php } ?>
 
+                    <?php
+                        // check disabled or not
+                        if ($this->session->userdata('role') == 3) { // PIC
+                            $send_status = 1;
+                            if($value->status != 0){ // status != draft
+                                $disabled = 'disabled';
+                            } else {
+                                $disabled = '';
+                            }
+                        } else if ($this->session->userdata('role') == 4) { // CO Magang
+                            $send_status = 2;
+                            if($value->status != 1){ // status != in progress
+                                $disabled = 'disabled';
+                            } else {
+                                $disabled = '';
+                            }
+                        } else {
+                            $disabled = 'disabled';
+                        }
+                    ?>
+
                     
                     <!-- Send Penyaluran Ke CO Magang-->
                     <button type="button" class="btn btn-sm btn-icon btn-light-info" data-bs-toggle="modal"
-                        data-bs-target="#modalKirimData<?= $value->id ?>" <?= ($value->status != 0 || $value->status == 2) ? 'disabled' : '' ?>>
+                        data-bs-target="#modalKirimData<?= $value->id ?>" <?= $disabled ?>>
                         <i class="fa fa-paper-plane" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top"
                             title="Kirim Ke CO Magang"></i>
                     </button>
@@ -156,7 +177,7 @@
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary"
                                         data-bs-dismiss="modal">Batal</button>
-                                    <a href="<?= base_url('penyaluran/send_data_penyaluran/' . $value->id) ?>"
+                                    <a href="<?= base_url('penyaluran/send_data_penyaluran/' . $value->id . "/" . $send_status) ?>"
                                         class="btn btn-info"><i class="fa fa-paper-plane" aria-hidden="true"></i> Kirim Ke <?= $send_to ?></a>
                                 </div>
                             </div>

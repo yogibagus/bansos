@@ -45,8 +45,10 @@ class Penyaluran extends CI_Controller
         $role = $this->session->userdata('role');
         if ($role == 4) { // role CO magang
             $data['send_to'] = "PIC";
-        } else if ($role == 1) { // role superadmin
+        } else if ($role == 3) { // role superadmin
             $data['send_to'] = "CO Magang";
+        } else {
+            $data['send_to'] = "-";
         }
 
         $this->load->view('template_admin/meta', $data);
@@ -97,19 +99,31 @@ class Penyaluran extends CI_Controller
     }
 
     // send data penyaluran
-    public function send_data_penyaluran($id)
+    public function send_data_penyaluran($id, $status = null)
     {
+        // check if status is null
+        if($status == null){
+            $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Status kosong!</div>');
+            redirect($this->agent->referrer());
+        }
+
         $data = [
-            'status' => 1,
+            'status' => $status,
             'updated_by' => $this->id,
             'updated_at' => date('Y-m-d H:i:s')
         ];
 
         $this->M_Penyaluran->update_master_penyaluran($data, $id);
+        if($status == 1){
+            // send notification to user assigned
+            $id_user = $this->M_Penyaluran->get_master_penyaluran_by_id($id)->id_user;
+            $this->notif->create_notif($id_user, 'Ada tugas penyaluran baru!', 'Anda mendapatkan tugas penyaluran baru dari ' . $this->nama, 'penyaluran co magang', $id);
+        }else if ($status == 2) {
+            // send notification to user created
+            $id_user = $this->M_Penyaluran->get_master_penyaluran_by_id($id)->created_by;
+            $this->notif->create_notif($id_user, 'Tugas penyaluran selesai!', 'Tugas penyaluran yang anda buat telah selesai', 'penyaluran co magang', $id);
+        }
 
-        // send notification to user assigned
-        $id_user = $this->M_Penyaluran->get_master_penyaluran_by_id($id)->id_user;
-        $this->notif->create_notif($id_user, 'Ada tugas penyaluran baru!', 'Anda mendapatkan tugas penyaluran baru dari ' . $this->nama, 'penyaluran co magang', $id);
         
         $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data berhasil dikirim!</div>');
         redirect($this->agent->referrer());
@@ -119,7 +133,9 @@ class Penyaluran extends CI_Controller
     public function detail_penyaluran($id_master_penyaluran)
     {
         // get master penyaluran by id
-        $data["title"] = $this->M_Penyaluran->get_master_penyaluran_by_id($id_master_penyaluran)->nama;
+        $master_penyaluran = $this->M_Penyaluran->get_master_penyaluran_by_id($id_master_penyaluran);
+        $data["title"] = $master_penyaluran->nama;
+        $data['status'] = $master_penyaluran->status;
 
         $data['id_master_penyaluran'] = $id_master_penyaluran;
 
@@ -299,6 +315,112 @@ class Penyaluran extends CI_Controller
         } catch (\Throwable $th) {
             $response['error'] = $th->getMessage();
             $response['message'] = "Gagal mengirim data bansos!";
+            $response['status'] = false;
+            echo json_encode($response);
+        }
+    }
+
+    
+    // update data bansos for ajax request
+    public function update_data_bansos(){
+        try {
+            $id_master_penyaluran = $this->input->post('id_master_penyaluran');
+            // check if id_master_penyaluran is empty
+            if ($id_master_penyaluran == '') {
+                $response['error'] = "id_master_penyaluran kosong!";
+                $response['message'] = "Gagal mengirim data bansos!";
+                $response['status'] = false;
+                echo json_encode($response);
+                return false;
+            }
+
+            // get master penyaluran by id
+            $master_penyaluran = $this->M_Penyaluran->get_master_penyaluran_by_id($id_master_penyaluran);
+            // check if master_penyaluran is empty
+            if ($master_penyaluran == '') {
+                $response['error'] = "master_penyaluran kosong!";
+                $response['message'] = "Gagal mengirim data bansos!";
+                $response['status'] = false;
+                echo json_encode($response);
+                return false;
+            }
+
+            // check status
+            $status_data = $this->input->post('status_data');
+            if($status_data == ''){
+                $response['error'] = "status_data kosong!";
+                $response['message'] = "Gagal update data bansos!";
+                $response['status'] = false;
+                echo json_encode($response);
+                return false;
+            }
+
+            $check_all = $this->input->post('check_all'); // check if all data is checked
+
+
+            // check if all data is checked
+            if($check_all === true || $check_all === 'true'){
+                $filter = $this->input->post('filter');
+                $filter_penyaluran = $this->input->post('filter_penyaluran');   
+                // get all data bansos
+                $data_bansos = $this->M_Penyaluran->get_data_penyaluran_by_id_master_penyaluran($filter, $filter_penyaluran);
+                // check if data_bansos is empty
+                if ($data_bansos == '') {
+                    $response['error'] = "data_bansos kosong!";
+                    $response['message'] = "Gagal mengirim data bansos!";
+                    $response['status'] = false;
+                    echo json_encode($response);
+                    return false;
+                }
+
+                
+                $tmp = [];
+                foreach ($data_bansos as $key => $value) {
+                    $tmp[] = [
+                        'id' => $value->id,
+                        'status' => $status_data,
+                    ];
+                }
+
+                $check = $this->M_Penyaluran->bulk_update_data_penyaluran($tmp, $id_master_penyaluran);
+                $tes = "123";
+            }else{
+                $checked_list = $this->input->post('checked_list'); // id_bansos that checked
+                // check if checked_list is empty and array
+                if ($checked_list == '' || !is_array($checked_list)) {
+                    $response['error'] = "checked_list kosong atau bukan array!";
+                    $response['message'] = "Gagal mengirim data bansos!";
+                    $response['status'] = false;
+                    echo json_encode($response);
+                    return false;
+                }
+        
+                $tmp = [];
+                foreach ($checked_list as $key => $value) {
+                    $tmp[] = [
+                        'id' => $value,
+                        'status' => $status_data,
+                    ];
+                }        
+                $check = $this->M_Penyaluran->bulk_update_data_penyaluran($tmp, $id_master_penyaluran);
+                $tes = "1234";
+            }
+
+            if ($check) {
+                $response['message'] = "Berhasil update data bansos!";
+                $response['status'] = true;
+                echo json_encode($response);
+            } else {
+                $response['error'] = "Gagal update data bansos!";
+                $response['message'] = "Gagal update data bansos! $tes";
+                $response['status'] = false;
+                echo json_encode($response);
+            }
+
+
+        } catch (\Throwable $th) {
+            $response['error'] = $th->getMessage();
+            $response['message'] = "Gagal update data bansos!";
             $response['status'] = false;
             echo json_encode($response);
         }

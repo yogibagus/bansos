@@ -26,9 +26,10 @@ class M_Penyaluran extends CI_Model
         if($role == 4){ // role CO magang
             // get id user
             $id_user = $this->session->userdata('id');
-            $this->db->where('tb_master_penyaluran.id_user', $id_user);
             // check status 1 or 2 with query or
-            $this->db->where('tb_penyaluran.status = 1 OR tb_penyaluran.status = 2');
+            $this->db->where_in('tb_master_penyaluran.status', [1,2]);
+            // check id user
+            $this->db->where('tb_master_penyaluran.id_user', $id_user);
         }
         
 
@@ -188,4 +189,19 @@ class M_Penyaluran extends CI_Model
             $this->db->update('tb_penyaluran', $data);
         }
     }
+
+    // bulk update data penyaluran
+    function bulk_update_data_penyaluran( $data, $id_master_penyaluran )
+    {
+        $this->db->trans_start();
+        $this->db->where('id_master_penyaluran', $id_master_penyaluran);
+        $check = $this->db->update_batch('tb_penyaluran', $data, 'id');
+        $this->db->trans_complete();
+        if ($check) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }

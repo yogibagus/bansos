@@ -185,7 +185,7 @@
                     <?php } ?>
 
                     <!-- add master penyaluran -->
-                    <?php if ($this->uri->segment(2) == "data_master_penyaluran") { ?>
+                    <?php if ($this->uri->segment(2) == "data_master_penyaluran" && ($this->session->userdata('is_super_admin') || $this->session->userdata('role') == 3)) { ?>
                     <div class="d-flex align-items-center gap-2 gap-lg-3">
                         <a href="#" class="btn btn-sm btn-flex btn-icon btn-dark align-self-center px-3"
                             data-bs-toggle="modal" data-bs-target="#modalAddMasterPenyaluran">
