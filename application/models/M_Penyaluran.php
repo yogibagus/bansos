@@ -20,6 +20,16 @@ class M_Penyaluran extends CI_Model
         $this->db->join('tb_user as user_assigned', 'user_assigned.id = tb_master_penyaluran.id_user', 'left');
         $this->db->join('tb_penyaluran', 'tb_penyaluran.id_master_penyaluran = tb_master_penyaluran.id', 'left');
         $this->db->where('tb_master_penyaluran.is_deleted', 0);
+
+        // get role
+        $role = $this->session->userdata('role');
+        if($role == 4){ // role CO magang
+            // get id user
+            $id_user = $this->session->userdata('id');
+            $this->db->where('tb_master_penyaluran.id_user', $id_user);
+        }
+        
+
         // $this->db->where('tb_penyaluran.is_deleted', 1);
         $this->db->group_by('tb_master_penyaluran.id');
         $this->db->order_by('tb_master_penyaluran.id', 'desc');

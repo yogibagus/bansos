@@ -102,30 +102,34 @@
                     <?= date_format(date_create($value->created_at), "d-m-Y H:i:s") ?>
                 </td>
                 <td>
-                    <!-- Tambah Data Penyaluran -->
-                    <a type="button" class="btn btn-sm btn-icon btn-light-dark  <?= $value->status != 0 ? 'disabled' : '' ?>"
-                        id="btnTambahPenyaluran<?= $value->id ?>"
-                        href="<?= base_url('penyaluran/data_bansos/' . $value->id) ?>">
-                        <i class="fa fa-plus" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top"
-                            title="Tambah Data Penyaluran"></i>
-                    </a>
+                    <?php 
+                        // Only Super Admin and PIC can access this
+                        if ($this->session->userdata('is_super_admin') || $this->session->userdata('role') == 3) { ?>
+                        <!-- Tambah Data Penyaluran -->
+                        <a type="button" class="btn btn-sm btn-icon btn-light-dark  <?= $value->status != 0 ? 'disabled' : '' ?>"
+                            id="btnTambahPenyaluran<?= $value->id ?>"
+                            href="<?= base_url('penyaluran/data_bansos/' . $value->id) ?>">
+                            <i class="fa fa-plus" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top"
+                                title="Tambah Data Penyaluran"></i>
+                        </a>
 
-                    <!-- script to delete local storage checkedValues value->id -->
-                    <script>
-                        $(document).ready(function () {
-                            $('#btnTambahPenyaluran<?= $value->id ?>').click(function () {
-                                localStorage.removeItem('checkedValues<?= $value->id ?>');
-                                localStorage.removeItem('checkedAllValues<?= $value->id ?>');
-                                console.log('removing checkedValues<?= $value->id ?>');
-                                console.log('removing checkedAllValues<?= $value->id ?>');
+                        <!-- script to delete local storage checkedValues value->id -->
+                        <script>
+                            $(document).ready(function () {
+                                $('#btnTambahPenyaluran<?= $value->id ?>').click(function () {
+                                    localStorage.removeItem('checkedValues<?= $value->id ?>');
+                                    localStorage.removeItem('checkedAllValues<?= $value->id ?>');
+                                    console.log('removing checkedValues<?= $value->id ?>');
+                                    console.log('removing checkedAllValues<?= $value->id ?>');
+                                });
                             });
-                        });
-                    </script>
+                        </script>
+                    <?php } ?>
 
                     
                     <!-- Send Penyaluran Ke CO Magang-->
                     <button type="button" class="btn btn-sm btn-icon btn-light-info" data-bs-toggle="modal"
-                        data-bs-target="#modalKirimData<?= $value->id ?>" <?= $value->status != 0 ? 'disabled' : '' ?>>
+                        data-bs-target="#modalKirimData<?= $value->id ?>" <?= ($value->status != 0 || $value->status == 2) ? 'disabled' : '' ?>>
                         <i class="fa fa-paper-plane" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top"
                             title="Kirim Ke CO Magang"></i>
                     </button>
@@ -146,14 +150,14 @@
                                     <div class="alert alert-primary" role="alert">
                                         <strong>Perhatian!</strong> Pastikan data yang akan dikirim sudah benar!
                                     </div>
-                                    <p>Apa anda yakin ingin mengirim <b>Data Penyaluran</b> ini ke CO Magang?<br>
+                                    <p>Apa anda yakin ingin mengirim <b>Data Penyaluran</b> ini ke <?= $send_to ?>
                                     </p>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary"
                                         data-bs-dismiss="modal">Batal</button>
                                     <a href="<?= base_url('penyaluran/send_data_penyaluran/' . $value->id) ?>"
-                                        class="btn btn-info"><i class="fa fa-paper-plane" aria-hidden="true"></i> Kirim Ke CO Magang</a>
+                                        class="btn btn-info"><i class="fa fa-paper-plane" aria-hidden="true"></i> Kirim Ke <?= $send_to ?></a>
                                 </div>
                             </div>
                         </div>
@@ -161,106 +165,126 @@
 
 
                     <!-- Detail Penyaluran -->
-                    <a type="button" class="btn btn-sm btn-icon btn-light-success" href="<?= base_url('penyaluran/detail_penyaluran/' . $value->id) ?>">
+                    <a type="button" class="btn btn-sm btn-icon btn-light-success" href="<?= base_url('penyaluran/detail_penyaluran/' . $value->id) ?>" id="btnDetailPenyaluran<?= $value->id ?>">
                         <i class="fa fa-external-link" aria-hidden="true" data-bs-toggle="tooltip"
                             data-bs-placement="top" title="Detail Penyaluran"></i>
                     </a>
 
-                    <!-- Edit Penyaluran -->
-                    <a type="button" class="btn btn-sm btn-icon btn-light-primary" data-bs-toggle="modal"
-                        data-bs-target="#modalEditMasterPenyaluran<?= $value->id ?>">
-                        <i class="fa fa-edit" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top"
-                            title="Edit"></i>
-                    </a>
+                    <!-- script to delete local storage checkedValues value->id -->
+                    <script>
+                        $(document).ready(function () {
+                            $('#btnDetailPenyaluran<?= $value->id ?>').click(function () {
+                                localStorage.removeItem('checkedValuesDetail<?= $value->id ?>');
+                                localStorage.removeItem('checkedAllDetailValues<?= $value->id ?>');
+                                console.log('removing checkedValuesDetail<?= $value->id ?>');
+                                console.log('removing checkedAllDetailValues<?= $value->id ?>');
+                            });
+                        });
+                    </script>
 
-                    <!-- Modal Edit Penyaluran -->
-                    <div class="modal fade" id="modalEditMasterPenyaluran<?= $value->id ?>" tabindex="-1"
-                        aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="modalEditMasterPenyaluran">Edit Data Penyaluran -
-                                        <?= $value->nama ?>
-                                    </h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <?php if ($value->updated_at != null) { ?>
-                                    <div class="alert alert-info" role="alert">
-                                        <strong><i class="fa fa-info-circle" aria-hidden="true"></i></strong> Terakhir
-                                        diupdate oleh <b><?= $value->nama_user_updated ?></b> pada
-                                        <b><?= date_format(date_create($value->updated_at), "d-m-Y H:i:s") ?></b>
+                    <?php  
+                        // Only Super Admin and PIC can access this
+                        if ($this->session->userdata('is_super_admin') || $this->session->userdata('role') == 3) { ?>
+                        <!-- Edit Penyaluran -->
+                        <a type="button" class="btn btn-sm btn-icon btn-light-primary" data-bs-toggle="modal"
+                            data-bs-target="#modalEditMasterPenyaluran<?= $value->id ?>">
+                            <i class="fa fa-edit" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top"
+                                title="Edit"></i>
+                        </a>
+
+                        <!-- Modal Edit Penyaluran -->
+                        <div class="modal fade" id="modalEditMasterPenyaluran<?= $value->id ?>" tabindex="-1"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="modalEditMasterPenyaluran">Edit Data Penyaluran -
+                                            <?= $value->nama ?>
+                                        </h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
                                     </div>
-                                    <?php } ?>
-                                    <!-- form update -->
-                                    <form action="<?= base_url('penyaluran/update_master_penyaluran/'.$value->id) ?>"
-                                        method="post">
-                                        <div class="mb-3">
-                                            <label for="edit_nama" class="form-label">Nama Master Penyaluran</label>
-                                            <input type="text" class="form-control" id="edit_nama" name="nama"
-                                                value="<?= $value->nama ?>" required>
+                                    <div class="modal-body">
+                                        <?php if ($value->updated_at != null) { ?>
+                                        <div class="alert alert-info" role="alert">
+                                            <strong><i class="fa fa-info-circle" aria-hidden="true"></i></strong> Terakhir
+                                            diupdate oleh <b><?= $value->nama_user_updated ?></b> pada
+                                            <b><?= date_format(date_create($value->updated_at), "d-m-Y H:i:s") ?></b>
                                         </div>
-                                        <div class="mb-3">
-                                            <label for="add_nama" class="form-label">CO Magang </label>
-                                            <select class="form-select" aria-label="Default select example"
-                                                name="id_user" required>
-                                                <option value='' selected disabled>Pilih CO Magang</option>
-                                                <option value="-1" <?= $value->id_user == -1 ? 'selected' : '' ?>>
-                                                    Semua CO Magang</option>
-                                                <?php foreach ($user as $key => $arr) {?>
-                                                <option value="<?= $arr->id ?>"
-                                                    <?= $arr->id == $value->id_user ? 'selected' : '' ?>>
-                                                    <?= $arr->nama ?>
-                                                </option>
-                                                <?php } ?>
-                                            </select>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                data-bs-dismiss="modal">Batal</button>
-                                            <button type="submit" class="btn btn-primary">Update</button>
-                                        </div>
-                                    </form>
+                                        <?php } ?>
+                                        <!-- form update -->
+                                        <form action="<?= base_url('penyaluran/update_master_penyaluran/'.$value->id) ?>"
+                                            method="post">
+                                            <div class="mb-3">
+                                                <label for="edit_nama" class="form-label">Nama Master Penyaluran</label>
+                                                <input type="text" class="form-control" id="edit_nama" name="nama"
+                                                    value="<?= $value->nama ?>" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="add_nama" class="form-label">CO Magang </label>
+                                                <select class="form-select" aria-label="Default select example"
+                                                    name="id_user" required>
+                                                    <option value='' selected disabled>Pilih CO Magang</option>
+                                                    <option value="-1" <?= $value->id_user == -1 ? 'selected' : '' ?>>
+                                                        Semua CO Magang</option>
+                                                    <?php foreach ($user as $key => $arr) {?>
+                                                    <option value="<?= $arr->id ?>"
+                                                        <?= $arr->id == $value->id_user ? 'selected' : '' ?>>
+                                                        <?= $arr->nama ?>
+                                                    </option>
+                                                    <?php } ?>
+                                                </select>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Batal</button>
+                                                <button type="submit" class="btn btn-primary">Update</button>
+                                            </div>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    <?php } ?>
 
-                    <!-- Delete Penyaluran -->
-                    <a type="button" class="btn btn-sm btn-icon btn-light-danger" data-bs-toggle="modal"
-                        data-bs-target="#modalDeleteMasterPenyaluran<?= $value->id ?>">
-                        <i class="fa fa-trash" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top"
-                            title="Hapus"></i>
-                    </a>
+                    <?php  
+                        // Only Super Admin and PIC can access this
+                        if ($this->session->userdata('is_super_admin') || $this->session->userdata('role') == 3) { ?>
+                        <!-- Delete Penyaluran -->
+                        <a type="button" class="btn btn-sm btn-icon btn-light-danger" data-bs-toggle="modal"
+                            data-bs-target="#modalDeleteMasterPenyaluran<?= $value->id ?>">
+                            <i class="fa fa-trash" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top"
+                                title="Hapus"></i>
+                        </a>
 
-                    <!-- Modal Delete Penyaluran -->
-                    <div class="modal fade" id="modalDeleteMasterPenyaluran<?= $value->id ?>" tabindex="-1"
-                        aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="modalDeleteBMasterPenyaluran">Hapus Penyaluran ID :
-                                        <?= $value->id ?>
-                                    </h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <p>Apa anda yakin ingin menghapus <b>Data Penyaluran</b> ini?<br>
-                                        <span class="text-danger">Perhatian! Data yang sudah dihapus tidak dapat
-                                            dikembalikan!</span>
-                                    </p>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary"
-                                        data-bs-dismiss="modal">Batal</button>
-                                    <a href="<?= base_url('penyaluran/delete_master_penyaluran/' . $value->id) ?>"
-                                        class="btn btn-danger">Delete</a>
+                        <!-- Modal Delete Penyaluran -->
+                        <div class="modal fade" id="modalDeleteMasterPenyaluran<?= $value->id ?>" tabindex="-1"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="modalDeleteBMasterPenyaluran">Hapus Penyaluran ID :
+                                            <?= $value->id ?>
+                                        </h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>Apa anda yakin ingin menghapus <b>Data Penyaluran</b> ini?<br>
+                                            <span class="text-danger">Perhatian! Data yang sudah dihapus tidak dapat
+                                                dikembalikan!</span>
+                                        </p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Batal</button>
+                                        <a href="<?= base_url('penyaluran/delete_master_penyaluran/' . $value->id) ?>"
+                                            class="btn btn-danger">Delete</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    <?php } ?>
                 </td>
             </tr>
             <?php $no++; } ?>

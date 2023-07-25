@@ -1,0 +1,59 @@
+Islam
+1. Al-Quran				-> API
+2. Masjid 				-> API
+3. Pilihan Doa				-> API
+4. Khotbah				-> API
+5. Ustadz				-> API
+6. Organisasi Masyarakat		-> Dokumen 
+7. Video Rohani				-> API
+8. Jadwal Sholat			-> API
+
+Kristen
+1. Alkitab				-> Dokumen
+2. Gereja				-> API
+3. Pilihan Doa				-> API
+4. Khotbah				-> API
+5. Tokoh Agama				-> Dokumen
+6. Lembaga Keagamaan			-> Aras (API) & Sinode (API)
+7. Video Rohani				-> API
+8. Rohaniawan Asing			-> API
+
+Katolik
+1. Alkitab				-> Dokumen & Audio
+2. Gereja				-> API
+3. Pilihan Doa 				-> API
+4. Renungan				-> API
+5. Tokoh Agama				-> Dokumen
+6. Organisasi Masyarakat		-> Dokumen
+7. Video Rohani				-> API
+8. Rohaniawan Asing			-> API
+
+Hindu
+1. Kitab Suci 							-> Dokumen & Audio
+2. Rumah Ibadah							-> Dokumen
+3. Pilihan Doa							-> API
+4. Dharma Wacana 						-> API
+5. Tokoh Agama							-> Dokumen
+6. Lembaga Agama/Keagamaan 					-> Ormas (Dokumen) & Lembaga Agama / Keagamaan (API)
+7. Video Rohani							-> API
+8. Lembaga Pendidikan Agama & Keagamaan 			-> PTKH (Dokumen) & Pasraman (API)
+
+Buddha
+1. Tripitaka 							-> Dokumen / Audio / Video
+2. Rumah Ibadah							-> Dokumen TW 2
+3. Pilihan Doa 							-> API
+4. Pesan Dharma							-> API
+5. Tokoh Agama							-> Dokumen
+6. Lembaga/Majelis/Yayasan Keagamaan 				-> Dokumen TW 2
+7. Video Rohani 						-> API
+8. Sanggar Seni Keagamaan 					-> Dokumen SISFO DATA OKB 2023 TW 1 
+
+Khonghucu
+1. Kitab Suci			-> Dokumen
+2. Rumah Ibadah			-> Dokumen
+3. Pilihan Doa			-> API
+4. Jiang Dao			-> API
+5. Rohaniwan			-> Dokumen
+6. Ormas Keagamaan		-> Dokumen
+7. Video Rohani			-> API
+8. Penyuluh Khonghucu		-> API

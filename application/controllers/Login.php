@@ -37,6 +37,7 @@ class Login extends CI_Controller
             if ($user->role == 1) { // superadmin
                 $sessiondata = array(
                     'id' => $user->id,
+                    'is_super_admin' => true,
                     'email' => $email,
                     'login' => true,
                     'role' => $user->role,
@@ -49,6 +50,7 @@ class Login extends CI_Controller
             } else if ($user->role == 2) { // Penyelia
                 $sessiondata = array(
                     'id' => $user->id,
+                    'is_super_admin' => false, // set false karena bukan superadmin
                     'email' => $email,
                     'login' => true,
                     'role' => $user->role,
@@ -63,6 +65,7 @@ class Login extends CI_Controller
             } else if ($user->role == 3) { // PIC
                 $sessiondata = array(
                     'id' => $user->id,
+                    'is_super_admin' => false, // set false karena bukan superadmin
                     'email' => $email,
                     'login' => true,
                     'role' => $user->role,
@@ -77,6 +80,7 @@ class Login extends CI_Controller
             } else if ($user->role == 4) { // CO Magang
                 $sessiondata = array(
                     'id' => $user->id,
+                    'is_super_admin' => false, // set false karena bukan superadmin
                     'email' => $email,
                     'login' => true,
                     'role' => $user->role,

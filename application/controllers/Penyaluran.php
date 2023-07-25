@@ -40,6 +40,15 @@ class Penyaluran extends CI_Controller
         $data["data"] = $this->M_Penyaluran->get_all_master_penyaluran();
         $data["user"] = $this->M_User->get_user_by_role(4); // get all user CO Magang
         $data["notif"] = $this->data['notif'];
+
+        // get role
+        $role = $this->session->userdata('role');
+        if ($role == 4) { // role CO magang
+            $data['send_to'] = "PIC";
+        } else if ($role == 1) { // role superadmin
+            $data['send_to'] = "CO Magang";
+        }
+
         $this->load->view('template_admin/meta', $data);
         $this->load->view('template_admin/header', $data);
         $this->load->view('template_admin/menu', $data);
