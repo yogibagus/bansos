@@ -44,7 +44,7 @@
                 <!-- Role -->
                 <div class="mb-3">
                     <label for="edit_role" class="form-label">Role</label>
-                    <select class="form-control" id="edit_role" name="role" required>
+                    <select class="form-control" id="edit_role" name="role" required disabled>
                         <option value="1" <?= ($user->role == 1) ? 'selected' : '' ?>>Super
                             Admin</option>
                         <option value="2" <?= ($user->role == 2) ? 'selected' : '' ?>>Admin
@@ -55,8 +55,8 @@
                 </div>
                 <!-- status -->
                 <div class="mb-3">
-                    <label for="edit_status" class="form-label">Status</label required>
-                    <select class="form-control" id="edit_status" name="status">
+                    <label for="edit_status" class="form-label">Status</label>
+                    <select class="form-control" id="edit_status" name="status" required disabled>
                         <option value="0" <?= ($user->status == 0) ? 'selected' : '' ?>>Non
                             Aktif</option>
                         <option value="1" <?= ($user->status == 1) ? 'selected' : '' ?>>

@@ -39,8 +39,8 @@ class M_Penyaluran extends CI_Model
         $master = $this->db->get()->result();
         
         // query to count data penyaluran by status (0: belum disalurkan, 1: tersalur, 2: tidak tersalur)
-        $count = 0;
         foreach ($master as $key => $value) {
+            $count = 0;
             $this->db->select('count(id) as jumlah');
             $this->db->from('tb_penyaluran');
             $this->db->where('id_master_penyaluran', $value->id);
@@ -68,7 +68,6 @@ class M_Penyaluran extends CI_Model
             $count = $count + $belum_disalurkan->jumlah + $tersalur->jumlah + $tidak_tersalur->jumlah;
             $master[$key]->jumlah_data_penyaluran = $count;
         }
-
         return $master;
     }
 

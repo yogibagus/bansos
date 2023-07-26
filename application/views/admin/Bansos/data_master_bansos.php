@@ -32,6 +32,9 @@
                 <th class="text-center">No</th>
                 <th>Nama</th>
                 <th width="15%">Total Data Bansos</th>
+                <th>Pending</th>
+                <th>Tersalur</th>
+                <th>Tidak Tersalur</th>
                 <th>Dibuat Oleh</th>
                 <th width="15%">Tgl. Dibuat</th>
                 <th width="15%">Aksi</th>
@@ -43,7 +46,26 @@
             <tr>
                 <td class="align-middle text-center"><?= $no ?></td>
                 <td class="align-middle"><?= $value->nama ?></td>
-                <td class="align-middle"><?= $value->jumlah_bansos ?></td>
+                <td class="align-middle text-center">
+                    <span class="badge bg-primary text-light">
+                        <?= $value->jumlah_bansos ?>
+                    </span>
+                </td>
+                <td class="align-middle text-center">
+                    <span class="badge bg-warning text-light">
+                        <?= $value->jumlah_bansos_belum_tersalur ?>
+                    </span>
+                </td>
+                <td class="align-middle text-center">
+                    <span class="badge bg-success text-light">
+                        <?= $value->jumlah_bansos_tersalur ?>
+                    </span>
+                </td>
+                <td class="align-middle text-center">
+                    <span class="badge bg-danger text-light">
+                        <?= $value->jumlah_bansos_tidak_tersalur ?>
+                    </span>
+                </td>
                 <td class="align-middle"><?= $value->nama_user ?></td>
                 <!-- FORMAT TGL -->
                 <td class="align-middle">

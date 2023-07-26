@@ -75,7 +75,7 @@
                     </span>
                 </td>
                 <td class="align-middle text-center">
-                    <span class="badge badge-dark">
+                    <span class="badge badge-warning">
                         <?= $value->data_belum_disalurkan ?>
                     </span>
                 <td class="align-middle text-center">

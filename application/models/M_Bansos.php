@@ -20,7 +20,47 @@ class M_Bansos extends CI_Model
         $this->db->where('tb_master_bansos.is_deleted', 0);
         $this->db->group_by('tb_master_bansos.id');
         $this->db->order_by('tb_master_bansos.id', 'desc');
-        return $this->db->get()->result();
+        $data = $this->db->get()->result();
+        
+        if(!empty($data)){
+            // get jumlah bansos tersalur
+            foreach ($data as $key => $value) {
+                $this->db->select('count(tb_penyaluran.id) as jumlah');
+                $this->db->from('tb_penyaluran');
+                $this->db->join('tb_bansos', 'tb_bansos.id = tb_penyaluran.id_bansos');
+                $this->db->where('tb_bansos.id_master_bansos', $value->id);
+                $this->db->where('tb_penyaluran.is_deleted', 0);
+                $this->db->where('tb_penyaluran.status', 1);
+                $tersalur = $this->db->get()->row();
+                $data[$key]->jumlah_bansos_tersalur = $tersalur->jumlah;
+            }
+
+            // get jumlah bansos tidak tersalur
+            foreach ($data as $key => $value) {
+                $this->db->select('count(tb_penyaluran.id) as jumlah');
+                $this->db->from('tb_penyaluran');
+                $this->db->join('tb_bansos', 'tb_bansos.id = tb_penyaluran.id_bansos');
+                $this->db->where('tb_bansos.id_master_bansos', $value->id);
+                $this->db->where('tb_penyaluran.is_deleted', 0);
+                $this->db->where('tb_penyaluran.status', 2);
+                $tidak_tersalur = $this->db->get()->row();
+                $data[$key]->jumlah_bansos_tidak_tersalur = $tidak_tersalur->jumlah;
+            }
+
+            // get jumlah bansos belum tersalur
+            foreach ($data as $key => $value) {
+                $this->db->select('count(tb_penyaluran.id) as jumlah');
+                $this->db->from('tb_penyaluran');
+                $this->db->join('tb_bansos', 'tb_bansos.id = tb_penyaluran.id_bansos');
+                $this->db->where('tb_bansos.id_master_bansos', $value->id);
+                $this->db->where('tb_penyaluran.is_deleted', 0);
+                $this->db->where('tb_penyaluran.status', 0);
+                $belum_tersalur = $this->db->get()->row();
+                $data[$key]->jumlah_bansos_belum_tersalur = $belum_tersalur->jumlah;
+            }
+
+        }
+        return $data;
     }
 
     // get data bansos by id
@@ -65,21 +105,32 @@ class M_Bansos extends CI_Model
     }
 
     // get all data bansos
-    public function get_all_bansos($filter)
+    public function get_all_bansos($filter, $filter_penyaluran)
     {
-        $this->db->select('tb_bansos.*, tb_master_bansos.nama as nama_master_bansos, tb_user.nama as nama_user, user_updated.nama as nama_user_updated');
+        $this->db->select('tb_bansos.*, tb_master_bansos.nama as nama_master_bansos, tb_user.nama as nama_user, user_updated.nama as nama_user_updated, tb_penyaluran.status as status_penyaluran');
         $this->db->from('tb_bansos');
         $this->db->join('tb_master_bansos', 'tb_master_bansos.id = tb_bansos.id_master_bansos', 'left');
         $this->db->join('tb_user', 'tb_user.id = tb_bansos.created_by', 'left');
         $this->db->join('tb_user as user_updated', 'user_updated.id = tb_bansos.updated_by', 'left');
+        $this->db->join('tb_penyaluran', 'tb_penyaluran.id_bansos = tb_bansos.id', 'left');
         // filter
         foreach ($filter as $key => $value) {
             if ($value != '') {
                 $this->db->like('tb_bansos.' . $key, $value);
             }
         }
+
+        // filter penyaluran
+        foreach ($filter_penyaluran as $key => $value) {
+            if ($value != '') {
+                $this->db->like('tb_penyaluran.' . $key, $value);
+            }
+        }
+
+        $this->db->where('tb_penyaluran.is_deleted', 0);
         $this->db->where('tb_bansos.is_deleted', 0);
         $this->db->order_by('tb_bansos.id', 'desc');
+        $this->db->group_by('tb_bansos.id');
         return $this->db->get()->result();
     }
 

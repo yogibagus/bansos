@@ -123,12 +123,14 @@
                         <!-- drop down status -->
                         <div class="col-md-3 col-sm-6 col-12">
                             <label for="">Status</label>
-                            <select class="form-control form-control-sm" name="status" id="filter_status">
+                            <select class="form-control form-control-sm" name="status_penyaluran" id="filter_status">
                                 <option value="" selected disabled>- Status -</option>
-                                <option value="0" <?= $filter["status"] == '0' ? 'selected' : '' ?>>Belum Tersalur
+                                <option value="0" <?= $filter_penyaluran["status"] == '0' ? 'selected' : '' ?>>Belum
+                                    Tersalur
                                 </option>
-                                <option value="1" <?= $filter["status"] == '1' ? 'selected' : '' ?>>Tersalur</option>
-                                <option value="2" <?= $filter["status"] == '2' ? 'selected' : '' ?>>Tidak Tersalur
+                                <option value="1" <?= $filter_penyaluran["status"] == '1' ? 'selected' : '' ?>>Tersalur
+                                <option value="2" <?= $filter_penyaluran["status"] == '2' ? 'selected' : '' ?>>Tidak
+                                    Tersalur
                                 </option>
                             </select>
                         </div>
@@ -213,6 +215,7 @@
         <thead class="thead-inverse bg-dark text-white">
             <tr>
                 <th width="5%" class="text-center">No</th>
+                <th>Status</th>
                 <th width="20%">Nama</th>
                 <th>Norek</th>
                 <th>NIK</th>
@@ -232,6 +235,15 @@
             <?php $no=1; foreach ($data as $key => $value) {?>
             <tr>
                 <td class="align-middle text-center"><?= $no ?></td>
+                <th class="align-middle">
+                    <?php if ($value->status_penyaluran == '0') { ?>
+                    <span class="badge badge-warning">Belum Tersalur</span>
+                    <?php } elseif ($value->status_penyaluran == '1') { ?>
+                    <span class="badge badge-success">Tersalur</span>
+                    <?php } elseif ($value->status_penyaluran == '2') { ?>
+                    <span class="badge badge-danger">Tidak Tersalur</span>
+                    <?php } ?>
+                </th>
                 <td class="align-middle"><?= $value->nama ?></td>
                 <td class="align-middle"><?= $value->norek ?></td>
                 <td class="align-middle"><?= $value->nik ?></td>

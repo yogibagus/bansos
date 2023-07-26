@@ -95,7 +95,6 @@ class Bansos extends CI_Controller
             'nama' => $this->input->post('nama') ?? null,
             'nik' => $this->input->post('nik') ?? null,
             'norek' => $this->input->post('norek') ?? null,
-            'status' => $this->input->post('status') ?? null,
             'id_master_bansos' => $this->input->post('id') ?? null,
             'tahun' => $this->input->post('tahun') ?? null,
             'jenis_bansos' => $this->input->post('jenis_bansos') ?? null,
@@ -105,9 +104,17 @@ class Bansos extends CI_Controller
             'kelurahan' => $this->input->post('kelurahan'),
         ];
         $data["filter"] = $filter;
+        
+        $filter_penyaluran = [
+            'status' => $this->input->post('status_penyaluran') ?? null,
+        ];
+
+        $data["filter_penyaluran"] = $filter_penyaluran;
+
+
         // log
         // echo json_encode($filter);die;
-        $data["data"] = $this->M_Bansos->get_all_bansos($filter);
+        $data["data"] = $this->M_Bansos->get_all_bansos($filter, $filter_penyaluran);
 
         $data["notif"] = $this->data['notif'];
         $this->load->view('template_admin/meta', $data);
