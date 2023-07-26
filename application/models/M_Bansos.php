@@ -60,7 +60,29 @@ class M_Bansos extends CI_Model
             }
 
         }
-        return $data;
+
+        // count global bansos
+        $total_all_bansos = 0;
+        $total_all_bansos_tersalur = 0;
+        $total_all_bansos_tidak_tersalur = 0;
+        $total_all_bansos_belum_tersalur = 0;
+        foreach ($data as $key => $value) {
+            $total_all_bansos += $value->jumlah_bansos;
+            $total_all_bansos_tersalur += $value->jumlah_bansos_tersalur;
+            $total_all_bansos_tidak_tersalur += $value->jumlah_bansos_tidak_tersalur;
+            $total_all_bansos_belum_tersalur += $value->jumlah_bansos_belum_tersalur;
+        }
+        $result = [
+            'data' => $data,
+            "summary" => [
+                'total_all_bansos' => $total_all_bansos,
+                'total_all_bansos_tersalur' => $total_all_bansos_tersalur,
+                'total_all_bansos_tidak_tersalur' => $total_all_bansos_tidak_tersalur,
+                'total_all_bansos_belum_tersalur' => $total_all_bansos_belum_tersalur
+            ]
+        ];
+
+        return $result;
     }
 
     // get data bansos by id

@@ -38,7 +38,9 @@ class Bansos extends CI_Controller
     public function data_master_bansos()
     {
         $data["notif"] = $this->data['notif'];
-        $data["data"] = $this->M_Bansos->get_all_master_bansos();
+        $data_master = $this->M_Bansos->get_all_master_bansos();
+        $data["data"] = $data_master['data'];
+        $data["summary"] = $data_master['summary'];
         $this->load->view('template_admin/meta', $data);
         $this->load->view('template_admin/header', $data);
         $this->load->view('template_admin/menu', $data);
@@ -89,7 +91,7 @@ class Bansos extends CI_Controller
     {
         $data["title"] = "Data Bansos";
 
-        $data["master_bansos"] = $this->M_Bansos->get_all_master_bansos();
+        $data["master_bansos"] = $this->M_Bansos->get_all_master_bansos()['data'];
 
         $filter = [
             'nama' => $this->input->post('nama') ?? null,
