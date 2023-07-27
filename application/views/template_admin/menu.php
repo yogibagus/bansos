@@ -38,14 +38,14 @@
                     data-kt-scroll-height="auto" data-kt-scroll-dependencies="#kt_app_header, #kt_app_header"
                     data-kt-scroll-wrappers="#kt_app_sidebar_menu" data-kt-scroll-offset="20px">
 
-                    <div class="menu-item">
+                    <!-- <div class="menu-item">
                         <a class="menu-link <?= ($this->uri->segment(2) == "dashboard_utama" ? 'active' : '') ?>"
                             href="<?= base_url('dashboard') ?>">
                             <span class="menu-section fs-5 fw-bolder ps-1 py-1">📊
                                 Dashboard
                             </span>
                         </a>
-                    </div>
+                    </div> -->
 
                     <div class="menu-item">
                         <a class="menu-link <?= ($this->uri->segment(2) == "data_user" ? 'active' : '') ?>"
@@ -72,7 +72,7 @@
                         </a>
                     </div>
                     <div class="menu-item">
-                        <a class="menu-link <?= ($this->uri->segment(2) == "proses" && $filter['status'] == 0 ? 'active' : '') ?>"
+                        <a class="menu-link <?= ($this->uri->segment(2) == "all" && $filter['status'] == 0 ? 'active' : '') ?>"
                             href="<?= base_url('bansos/all') ?>">
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
@@ -87,7 +87,7 @@
                     </div>
 
                     <div class="menu-item">
-                        <a class="menu-link <?= ($this->uri->segment(2) == "data_master_penyaluran") ?>"
+                        <a class="menu-link <?= ($this->uri->segment(2) == "data_master_penyaluran") ? 'active' : '' ?>"
                             href="<?= base_url('penyaluran/data_master_penyaluran') ?>">
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
