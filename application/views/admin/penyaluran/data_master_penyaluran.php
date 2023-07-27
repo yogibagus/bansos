@@ -35,10 +35,19 @@
     </div>
 </div>
 
+<?php 
+// set col xl
+if ($this->session->userdata('role') == 2) { // Penyelia
+    $col = "col-xl-4";
+} else {
+    $col = "col-xl-3";
+}
+?>
+
 <!-- card summary -->
 <div class="mb-4 container">
     <div class="row">
-        <div class="col-xl-4 col-sm-6 col-12">
+        <div class="<?= $col ?> col-sm-6 col-12">
             <div class="card shadow-sm">
                 <div class="card-content">
                     <div class="card-body">
@@ -52,7 +61,23 @@
                 </div>
             </div>
         </div>
-        <div class="col-xl-4 col-sm-6 col-12">
+        <?php if ($this->session->userdata('role') != 2) { // penyeleksi can't access this ?>
+        <div class="<?= $col ?> col-sm-6 col-12">
+            <div class="card shadow-sm">
+                <div class="card-content">
+                    <div class="card-body">
+                        <div class="media d-flex">
+                            <div class="media-body text-left">
+                                <h1 class="text-warning"><?= $summary["total_all_bansos_belum_tersalur"] ?></h1>
+                                <span class="h5"><i class="fas fa-box text-warning"></i> Total Pending</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php } ?>
+        <div class="<?= $col ?> col-sm-6 col-12">
             <div class="card shadow-sm">
                 <div class="card-content">
                     <div class="card-body">
@@ -66,7 +91,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-xl-4 col-sm-6 col-12">
+        <div class="<?= $col ?> col-sm-6 col-12">
             <div class="card shadow-sm">
                 <div class="card-content">
                     <div class="card-body">

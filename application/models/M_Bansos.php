@@ -12,17 +12,19 @@ class M_Bansos extends CI_Model
     
     public function get_all_master_bansos()
     {
-        $this->db->select('tb_master_bansos.*, tb_user.nama as nama_user, user_updated.nama as nama_user_updated, count(tb_bansos.id_master_bansos) as jumlah_bansos');
+        $this->db->select('tb_master_bansos.*, tb_user.nama as nama_user, user_updated.nama as nama_user_updated, COUNT(tb_bansos.id_master_bansos) as jumlah_bansos');
         $this->db->from('tb_master_bansos');
         $this->db->join('tb_user', 'tb_user.id = tb_master_bansos.created_by');
         $this->db->join('tb_user as user_updated', 'user_updated.id = tb_master_bansos.updated_by', 'left');
         $this->db->join('tb_bansos', 'tb_bansos.id_master_bansos = tb_master_bansos.id', 'left');
-        $this->db->join('tb_penyaluran', 'tb_penyaluran.id_bansos = tb_bansos.id', 'left');
-        $this->db->where('tb_penyaluran.is_deleted', 0);
+        // $this->db->join('tb_penyaluran', 'tb_penyaluran.id_bansos = tb_bansos.id', 'left');
+        // $this->db->where('tb_penyaluran.is_deleted', 0);
         $this->db->where('tb_master_bansos.is_deleted', 0);
         $this->db->group_by('tb_master_bansos.id');
         $this->db->order_by('tb_master_bansos.id', 'desc');
         $data = $this->db->get()->result();
+
+        // echo json_encode($data);die;
         
         if(!empty($data)){
             // get jumlah bansos tersalur
