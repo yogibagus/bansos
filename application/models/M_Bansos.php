@@ -17,6 +17,8 @@ class M_Bansos extends CI_Model
         $this->db->join('tb_user', 'tb_user.id = tb_master_bansos.created_by');
         $this->db->join('tb_user as user_updated', 'user_updated.id = tb_master_bansos.updated_by', 'left');
         $this->db->join('tb_bansos', 'tb_bansos.id_master_bansos = tb_master_bansos.id', 'left');
+        $this->db->join('tb_penyaluran', 'tb_penyaluran.id_bansos = tb_bansos.id', 'left');
+        $this->db->where('tb_penyaluran.is_deleted', 0);
         $this->db->where('tb_master_bansos.is_deleted', 0);
         $this->db->group_by('tb_master_bansos.id');
         $this->db->order_by('tb_master_bansos.id', 'desc');
