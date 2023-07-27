@@ -192,6 +192,15 @@
                                 </div>
                                 <p>Apakah anda yakin ingin mengubah status data yang dipilih menjadi <b>Tidak
                                         Tersalur</b>?
+                                        <!-- input note -->
+                                <label for="edit_role" class="form-label mt-3">Alasan Tidak Tersalur: </label>
+                                <select class="form-control" id="note" name="note" required>
+                                    <option value="" selected disabled>- Alasan -</option>
+                                    <option value="Tidak Hadir">Tidak Hadir</option>
+                                    <option value="Pindah">Pindah</option>
+                                    <option value="Meninggal">Meninggal</option>
+                                    <option value="Ganda">Ganda</option>
+                                </select>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
@@ -221,8 +230,10 @@
                 <th>Kecamatan</th>
                 <th>Kelurahan</th>
                 <th width="10%">Tgl Submit</th>
-                <th width="5%">Aksi</th>
-
+                <th width="5%">Note</th>
+                <?php if ($this->session->userdata('role') != 4) {// penyelia can't access action ?>
+                    <th width="5%">Aksi</th>
+                <?php } ?>
             </tr>
         </thead>
         <tbody>
@@ -255,6 +266,8 @@
                 <td class="align-middle">
                     <?= date_format(date_create($value->created_at_penyaluran), "d-m-Y H:i:s") ?>
                 </td>
+                <td class="align-middle"><?= $value->note ?></td>
+                <?php if ($this->session->userdata('role') != 4) {// comagang can't access action ?>
                 <td>
                     <?php
                     // check if user is super admin or role is 4
@@ -296,6 +309,7 @@
                     </div>
                     <?php } ?>
                 </td>
+                <?php } ?>
             </tr>
             <?php $no++; } ?>
         </tbody>
@@ -514,6 +528,24 @@
         }
 
         function addData(status, checkedValuesDetail, paramStatus){
+            // get note value
+            var note = $('#note').val();
+            console.log("note", note);
+            // check if note is empty
+            if (paramStatus == 2 && (note == '' || note == null)) {
+                // dismis all modal
+                $('.modal').modal('hide');
+                // swall alert with button to reload page
+                Swal.fire({
+                    title: 'Gagal!',
+                    text: 'Alasan tidak tersalur tidak boleh kosong',
+                    icon: 'error',
+                    confirmButtonText: 'Ok',
+                    allowOutsideClick: false,
+                })
+                return false;
+            }
+
             // close all modal
             $('.modal').modal('hide');
             $.ajax({
@@ -525,6 +557,7 @@
                     id_master_penyaluran: <?=$id_master_penyaluran?> ,
                     check_all: localStorage.getItem('checkAllValuesDetail<?= $id_master_penyaluran ?>'),
                     filter: <?=json_encode($filter)?> ,
+                    note: note
                 },
                 success: function (data) {
                     console.log(data);

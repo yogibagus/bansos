@@ -69,14 +69,7 @@
                                     <div class="menu menu-sub menu-sub-dropdown menu-column w-350px w-lg-375px"
                                         data-kt-menu="true" id="kt_menu_notifications">
                                         <!-- begin::Heading-->
-                                        <div class="d-flex flex-column bgi-no-repeat rounded-top"
-                                            style="background-image:url('/metronic8/demo44/assets/media/misc/menu-header-bg.jpg')">
-                                            <!--begin::Title-->
-                                            <h3 class="text-white fw-semibold px-9 mt-10 mb-6">
-                                                Notifications
-                                            </h3>
-                                            <!--end::Title-->
-                                        </div>
+                      
                                         <!--end::Heading -->
 
                                         <!--begin::Tab content-->
@@ -88,7 +81,8 @@
                                                 <div class="scroll-y mh-325px p-3">
                                                     <!--begin::Item-->
                                                     <?php foreach ($notif as $n) : ?>
-                                                    <div class="card text-left p-3 mb-3 <?php if ($n->is_read == 0) { echo 'bg-light-primary';} ?>">
+                                                    <div
+                                                        class="card text-left p-3 mb-3 <?php if ($n->is_read == 0) { echo 'bg-light-primary';} ?>">
                                                         <div class="align-items-center">
                                                             <div class="mb-0 me-2">
                                                                 <a href="<?= base_url() ?>notification/read/<?= $n->id ?>"
@@ -99,7 +93,8 @@
                                                             </div>
                                                             <span
                                                                 class="badge badge-light-primary"><?php echo date('d M Y h:i', strtotime($n->created_at)); ?></span>
-                                                            <span class="badge badge-light-info text-uppercase"><?= $n->jenis ?></span>
+                                                            <span
+                                                                class="badge badge-light-info text-uppercase"><?= $n->jenis ?></span>
                                                             <?php if ($n->is_read == 0) : ?>
                                                             <span class="badge badge-danger float-end">NEW!</span><br>
                                                             <?php endif; ?>
@@ -107,6 +102,20 @@
                                                     </div>
                                                     <?php endforeach; ?>
                                                     <!--end::Item-->
+
+                                                    <!-- data empty -->
+                                                    <?php if (empty($notif)) { ?>
+                                                    <div class="card text-left p-3 mb-3">
+                                                        <div class="align-items-center">
+                                                            <div class="mb-0 me-2">
+                                                                <a href="#"
+                                                                    class="fs-6 text-gray-800 text-hover-primary fw-bold">
+                                                                    Tidak ada notifikasi
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <?php } ?>
                                                 </div>
                                                 <!--end::Items-->
 
@@ -129,11 +138,25 @@
                                 <!--end::Notifications-->
 
                                 <!--begin::Menu wrapper-->
-                                <div class="cursor-pointer symbol symbol-35px symbol-md-40px"
+                                <div class="cursor-pointer symbol symbol-35px symbol-md-40px px-4 me-2"
+                                    style="padding-left: 0rem !important;"
                                     data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-attach="parent"
                                     data-kt-menu-placement="bottom-end">
                                     <img class="symbol symbol-35px symbol-md-40px"
                                         src="<?= base_url() ?>assets/media/avatars/300-5.jpg" alt="user" />
+                                </div>
+
+                                <div class="d-flex flex-column">
+                                    <div class="fw-bold d-flex align-items-center fs-5 text-capitalize">
+                                        <!-- get nama from session -->
+                                        <?= $this->session->userdata('nama'); ?>
+                                        <span class="badge badge-light-success fw-bold fs-8 px-2 py-1 ms-2">
+                                            Super Admin
+                                        </span>
+                                    </div>
+
+                                    <a href="#" class="fw-semibold text-muted text-hover-primary fs-7">
+                                        <?= $this->session->userdata('email'); ?> </a>
                                 </div>
 
                                 <!--begin::User account menu-->

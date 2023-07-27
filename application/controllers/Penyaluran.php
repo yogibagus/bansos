@@ -383,6 +383,7 @@ class Penyaluran extends CI_Controller
                     $tmp[] = [
                         'id' => $value->id,
                         'status' => $status_data,
+                        'note' => $this->input->post('note') ?? '',
                     ];
                 }
 
@@ -404,6 +405,7 @@ class Penyaluran extends CI_Controller
                     $tmp[] = [
                         'id' => $value,
                         'status' => $status_data,
+                        'note' => $this->input->post('note') ?? '',
                     ];
                 }        
                 $check = $this->M_Penyaluran->bulk_update_data_penyaluran($tmp, $id_master_penyaluran);

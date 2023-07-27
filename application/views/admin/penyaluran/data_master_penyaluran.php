@@ -230,7 +230,7 @@ if ($this->session->userdata('role') == 2) { // Penyelia
                         <button type="button" class="btn btn-sm btn-icon btn-light-info" data-bs-toggle="modal"
                             data-bs-target="#modalKirimData<?= $value->id ?>" <?= $disabled ?>>
                             <i class="fa fa-paper-plane" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top"
-                                title="Kirim Ke CO Magang"></i>
+                                title="Kirim Ke <?= $send_to ?>"></i>
                         </button>
 
                         <!-- Modal Kirim Ke CO Magang -->

@@ -154,6 +154,7 @@ class M_Penyaluran extends CI_Model
         tb_penyaluran.id_master_penyaluran,
         tb_penyaluran.id_bansos,
         tb_penyaluran.status as status_penyaluran,
+        tb_penyaluran.note,
         tb_penyaluran.created_at as created_at_penyaluran,
         tb_penyaluran.updated_at as updated_at_penyaluran,
         tb_penyaluran.created_by as created_by_penyaluran,
