@@ -37,7 +37,9 @@ class Penyaluran extends CI_Controller
 
     public function data_master_penyaluran()
     {
-        $data["data"] = $this->M_Penyaluran->get_all_master_penyaluran();
+        $data_master = $this->M_Penyaluran->get_all_master_penyaluran();
+        $data["data"] = $data_master["data"];
+        $data["summary"] = $data_master["summary"];
         $data["user"] = $this->M_User->get_user_by_role(4); // get all user CO Magang
         $data["notif"] = $this->data['notif'];
 

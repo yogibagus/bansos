@@ -68,7 +68,30 @@ class M_Penyaluran extends CI_Model
             $count = $count + $belum_disalurkan->jumlah + $tersalur->jumlah + $tidak_tersalur->jumlah;
             $master[$key]->jumlah_data_penyaluran = $count;
         }
-        return $master;
+
+        // count global bansos
+        $total_all_bansos = 0;
+        $total_all_bansos_tersalur = 0;
+        $total_all_bansos_tidak_tersalur = 0;
+        $total_all_bansos_belum_tersalur = 0;
+        foreach ($master as $key => $value) {
+            $total_all_bansos = $total_all_bansos + $value->jumlah_data_penyaluran;
+            $total_all_bansos_tersalur = $total_all_bansos_tersalur + $value->data_tersalur;
+            $total_all_bansos_tidak_tersalur = $total_all_bansos_tidak_tersalur + $value->data_tidak_tersalur;
+            $total_all_bansos_belum_tersalur = $total_all_bansos_belum_tersalur + $value->data_belum_disalurkan;
+        }
+        
+        $result = [
+            'data' => $master,
+            'summary' => [
+                'total_all_bansos' => $total_all_bansos,
+                'total_all_bansos_tersalur' => $total_all_bansos_tersalur,
+                'total_all_bansos_tidak_tersalur' => $total_all_bansos_tidak_tersalur,
+                'total_all_bansos_belum_tersalur' => $total_all_bansos_belum_tersalur,
+            ]
+        ];
+
+        return $result;
     }
 
     // get data master penyaluran by id

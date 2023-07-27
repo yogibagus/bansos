@@ -35,6 +35,68 @@
     </div>
 </div>
 
+<!-- card summary -->
+<div class="mb-4 container">
+    <div class="row">
+        <div class="col-xl-3 col-sm-6 col-12">
+            <div class="card shadow-sm">
+                <div class="card-content">
+                    <div class="card-body">
+                        <div class="media d-flex">
+                            <div class="media-body text-left">
+                                <h1 class="text-primary"><?= $summary["total_all_bansos"] ?></h1>
+                                <span class="h5"><i class="fas fa-box text-primary"></i> Total Bansos</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 col-12">
+            <div class="card shadow-sm">
+                <div class="card-content">
+                    <div class="card-body">
+                        <div class="media d-flex">
+                            <div class="media-body text-left">
+                                <h1 class="text-warning"><?= $summary["total_all_bansos_belum_tersalur"] ?></h1>
+                                <span class="h5"><i class="fas fa-box text-warning"></i> Total Pending</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 col-12">
+            <div class="card shadow-sm">
+                <div class="card-content">
+                    <div class="card-body">
+                        <div class="media d-flex">
+                            <div class="media-body text-left">
+                                <h1 class="text-success"><?= $summary["total_all_bansos_tersalur"] ?></h1>
+                                <span class="h5"><i class="fas fa-box text-success"></i> Total Tersalur</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 col-12">
+            <div class="card shadow-sm">
+                <div class="card-content">
+                    <div class="card-body">
+                        <div class="media d-flex">
+                            <div class="media-body text-left">
+                                <h1 class="text-danger"><?= $summary["total_all_bansos_tidak_tersalur"] ?></h1>
+                                <span class="h5"><i class="fas fa-box text-danger"></i> Total Tidak Tersalur</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="card container p-5">
     <table class="table table-striped table-hover fw-bold" id="dataTables">
         <thead class="thead-inverse bg-dark text-white">
