@@ -131,14 +131,13 @@ class M_Bansos extends CI_Model
     }
 
     // get all data bansos
-    public function get_all_bansos($filter, $filter_penyaluran)
+    public function get_all_bansos($filter, $filter_penyaluran = null)
     {
-        $this->db->select('tb_bansos.*, tb_master_bansos.nama as nama_master_bansos, tb_user.nama as nama_user, user_updated.nama as nama_user_updated, tb_penyaluran.status as status_penyaluran');
+        $this->db->select('tb_bansos.*, tb_master_bansos.nama as nama_master_bansos, tb_user.nama as nama_user, user_updated.nama as nama_user_updated');
         $this->db->from('tb_bansos');
         $this->db->join('tb_master_bansos', 'tb_master_bansos.id = tb_bansos.id_master_bansos', 'left');
         $this->db->join('tb_user', 'tb_user.id = tb_bansos.created_by', 'left');
         $this->db->join('tb_user as user_updated', 'user_updated.id = tb_bansos.updated_by', 'left');
-        $this->db->join('tb_penyaluran', 'tb_penyaluran.id_bansos = tb_bansos.id', 'left');
         // filter
         foreach ($filter as $key => $value) {
             if ($value != '') {
@@ -146,18 +145,39 @@ class M_Bansos extends CI_Model
             }
         }
 
-        // filter penyaluran
-        foreach ($filter_penyaluran as $key => $value) {
-            if ($value != '') {
-                $this->db->like('tb_penyaluran.' . $key, $value);
-            }
-        }
-
-        $this->db->where('tb_penyaluran.is_deleted', 0);
         $this->db->where('tb_bansos.is_deleted', 0);
         $this->db->order_by('tb_bansos.id', 'desc');
         $this->db->group_by('tb_bansos.id');
-        return $this->db->get()->result();
+        $data = $this->db->get()->result();
+
+        // check if is in penyaluran, if yes use status penyaluran as status bansos
+        if(!empty($data)){
+            foreach ($data as $key => $value) {
+                $this->db->select('tb_penyaluran.status');
+                $this->db->from('tb_penyaluran');
+                $this->db->where('tb_penyaluran.id_bansos', $value->id);
+                $this->db->where('tb_penyaluran.is_deleted', 0);
+                //filter penyaluran
+                // if(!empty($filter_penyaluran)){
+                //     foreach ($filter_penyaluran as $key2 => $value2) {
+                //         if ($value2 != '' || $value2 != null) {
+                //             $this->db->like('tb_penyaluran.' . $key2, $value2);
+                //         }
+                //     }
+                // }
+                $this->db->order_by('tb_penyaluran.id', 'desc');
+                $this->db->limit(1);
+                $status = $this->db->get()->row();
+                if(!empty($status)){
+                    $data[$key]->status_penyaluran = $status->status;
+                }else{
+                    $data[$key]->status_penyaluran = 0;
+                }
+            }
+        }
+
+        return $data;
+
     }
 
     // get all data bansos
