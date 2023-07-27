@@ -150,8 +150,24 @@
                                     <div class="fw-bold d-flex align-items-center fs-5 text-capitalize">
                                         <!-- get nama from session -->
                                         <?= $this->session->userdata('nama'); ?>
-                                        <span class="badge badge-light-success fw-bold fs-8 px-2 py-1 ms-2">
-                                            Super Admin
+                                            <?php if ($this->session->userdata('role') == 1) {
+                                                $role = "Super Admin";
+                                                $color = "danger";
+                                            } else if ($this->session->userdata('role') == 2) {
+                                                $role = "Penyelia";
+                                                $color = "warning";
+                                            } else if ($this->session->userdata('role') == 3) {
+                                                $role = "PIC";
+                                                $color = "primary";
+                                            } else if ($this->session->userdata('role') == 4) {
+                                                $role = "CO Magang";
+                                                $color = "success";
+                                            } else {
+                                                $role = "User";
+                                                $color = "";
+                                            } ?>
+                                        <span class="badge badge-light-<?= $color ?> fw-bold fs-8 px-2 py-1 ms-2">
+                                            <?= $role ?>
                                         </span>
                                     </div>
 
@@ -176,8 +192,8 @@
                                                 <div class="fw-bold d-flex align-items-center fs-5 text-capitalize">
                                                     <!-- get nama from session -->
                                                     <?= $this->session->userdata('nama'); ?>
-                                                    <span class="badge badge-light-success fw-bold fs-8 px-2 py-1 ms-2">
-                                                        Super Admin
+                                                    <span class="badge badge-light-<?= $color ?> fw-bold fs-8 px-2 py-1 ms-2">
+                                                        <?= $role ?>
                                                     </span>
                                                 </div>
 
