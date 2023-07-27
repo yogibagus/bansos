@@ -21,7 +21,7 @@ class Penyaluran extends CI_Controller
         } 
         else {
             if ($this->uri->segment(2) != "detail_penyaluran"){
-                if ($this->role != 1 || $this->role == 2) {
+                if ($this->role == 2) {
                     $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Tidak memiliki akses!</div>');
                     redirect($this->agent->referrer());
                 }
