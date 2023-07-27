@@ -252,7 +252,7 @@ class Penyaluran extends CI_Controller
             $check_all = $this->input->post('check_all'); // check if all data is checked
 
             // check if all data is checked
-            if($check_all == true){
+            if($check_all === true || $check_all === 'true'){
                 $filter = $this->input->post('filter');
                 // get all data bansos
                 $data_bansos = $this->M_Bansos->get_all_bansos_penyaluran($filter, $id_master_penyaluran);
@@ -276,7 +276,7 @@ class Penyaluran extends CI_Controller
                 }
 
                 $check = $this->M_Penyaluran->bulk_insert_data_penyaluran($tmp);
-            }else if($check_all == false){
+            }else if($check_all === false || $check_all === 'false'){
                 $checked_list = $this->input->post('checked_list'); // id_bansos that checked
                 // check if checked_list is empty and array
                 if ($checked_list == '' || !is_array($checked_list)) {
