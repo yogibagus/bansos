@@ -195,7 +195,6 @@ class M_Penyaluran extends CI_Model
 
         // echo $this->db->last_query();die;
         $this->db->where('tb_penyaluran.is_deleted', 0);
-        $this->db->where('tb_master_penyaluran.is_deleted', 0);
         $this->db->where('tb_bansos.is_deleted', 0);
         $this->db->order_by('tb_penyaluran.id', 'desc');
         $data_penyaluran = $this->db->get()->result();
