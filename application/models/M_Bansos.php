@@ -146,6 +146,7 @@ class M_Bansos extends CI_Model
         }
 
         $this->db->where('tb_bansos.is_deleted', 0);
+        $this->db->where('tb_master_bansos.is_deleted', 0);
         $this->db->order_by('tb_bansos.id', 'desc');
         $this->db->group_by('tb_bansos.id');
         $data = $this->db->get()->result();
