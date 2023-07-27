@@ -157,14 +157,6 @@ class M_Bansos extends CI_Model
                 $this->db->from('tb_penyaluran');
                 $this->db->where('tb_penyaluran.id_bansos', $value->id);
                 $this->db->where('tb_penyaluran.is_deleted', 0);
-                //filter penyaluran
-                // if(!empty($filter_penyaluran)){
-                //     foreach ($filter_penyaluran as $key2 => $value2) {
-                //         if ($value2 != '' || $value2 != null) {
-                //             $this->db->like('tb_penyaluran.' . $key2, $value2);
-                //         }
-                //     }
-                // }
                 $this->db->order_by('tb_penyaluran.id', 'desc');
                 $this->db->limit(1);
                 $status = $this->db->get()->row();
@@ -172,6 +164,18 @@ class M_Bansos extends CI_Model
                     $data[$key]->status_penyaluran = $status->status;
                 }else{
                     $data[$key]->status_penyaluran = 0;
+                }
+            }
+        }
+
+        // filter penyaluran
+        if(!empty($filter_penyaluran)){
+            foreach ($data as $key => $value) {
+                if ($filter_penyaluran["status"] != null) {
+                    if($value->status_penyaluran != $filter_penyaluran["status"]){
+                        // unset check status except filter status
+                        unset($data[$key]);
+                    }
                 }
             }
         }
