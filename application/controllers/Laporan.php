@@ -21,7 +21,7 @@ class Laporan extends CI_Controller
         else {
             if ($this->role != 1 && $this->role != 2) {
                 $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Tidak memiliki akses!</div>');
-                redirect('');
+                redirect($this->agent->referrer());
             }
         }
 
@@ -35,7 +35,7 @@ class Laporan extends CI_Controller
     }
 
     // read notif
-    public function bansos()
+    public function laporan_penyaluran()
     {
         $data_master = $this->M_Penyaluran->get_all_master_penyaluran();
         $data["data"] = $data_master["data"];

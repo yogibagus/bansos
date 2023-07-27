@@ -22,7 +22,7 @@ class Bansos extends CI_Controller
         else {
             if ($this->role != 1 && $this->role != 2) {
                 $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Tidak memiliki akses!</div>');
-                redirect('');
+                redirect($this->agent->referrer());
             }
         }
 

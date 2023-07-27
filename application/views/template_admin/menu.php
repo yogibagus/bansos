@@ -97,8 +97,11 @@
                     </div>
 
                     <div class="menu-item">
-                        <div class="menu-link"><span class="menu-section fs-5 fw-bolder ps-1 py-1">🧾 Laporan</span>
-                        </div>
+                        <a class="menu-link <?= ($this->uri->segment(2) == "laporan_penyaluran" ? 'active' : '') ?>"
+                            href="<?= base_url('laporan/laporan_penyaluran') ?>">
+                            <span class="menu-section fs-5 fw-bolder ps-1 py-1"> 🧾 Laporan
+                            </span>
+                        </a>
                     </div>
                 </div>
             </div>

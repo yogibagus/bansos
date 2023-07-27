@@ -20,10 +20,12 @@ class Penyaluran extends CI_Controller
             redirect('login');
         } 
         else {
-            // if ($this->role != 1) {
-            //     $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Tidak memiliki akses!</div>');
-            //     redirect('');
-            // }
+            if ($this->uri->segment(2) != "detail_penyaluran"){
+                if ($this->role != 1 || $this->role == 2) {
+                    $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Tidak memiliki akses!</div>');
+                    redirect($this->agent->referrer());
+                }
+            }
         }
 
         // get notif
@@ -72,7 +74,7 @@ class Penyaluran extends CI_Controller
 
         $this->M_Penyaluran->update_master_penyaluran($data);
         $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data berhasil ditambahkan!</div>');
-            redirect($this->agent->referrer());
+        redirect($this->agent->referrer());
     }
 
     // update data master penyaluran

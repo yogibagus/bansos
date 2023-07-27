@@ -38,7 +38,7 @@
 <!-- card summary -->
 <div class="mb-4 container">
     <div class="row">
-        <div class="col-xl-3 col-sm-6 col-12">
+        <div class="col-xl-4 col-sm-6 col-12">
             <div class="card shadow-sm">
                 <div class="card-content">
                     <div class="card-body">
@@ -52,21 +52,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-xl-3 col-sm-6 col-12">
-            <div class="card shadow-sm">
-                <div class="card-content">
-                    <div class="card-body">
-                        <div class="media d-flex">
-                            <div class="media-body text-left">
-                                <h1 class="text-warning"><?= $summary["total_all_bansos_belum_tersalur"] ?></h1>
-                                <span class="h5"><i class="fas fa-box text-warning"></i> Total Pending</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-3 col-sm-6 col-12">
+        <div class="col-xl-4 col-sm-6 col-12">
             <div class="card shadow-sm">
                 <div class="card-content">
                     <div class="card-body">
@@ -80,7 +66,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-xl-3 col-sm-6 col-12">
+        <div class="col-xl-4 col-sm-6 col-12">
             <div class="card shadow-sm">
                 <div class="card-content">
                     <div class="card-body">
@@ -105,7 +91,9 @@
                 <th width="15%">Nama</th>
                 <th>CO Magang</th>
                 <th>Jumlah Data</th>
+                <?php if ($this->session->userdata('role') != 2) { // penyeleksi can't access this ?>
                 <th>Pending</th>
+                <?php } ?>
                 <th>Tersalur</th>
                 <th>Tidak Tersalur</th>
                 <th>Status</th>
@@ -136,10 +124,13 @@
                         <?= $value->jumlah_data_penyaluran ?>
                     </span>
                 </td>
+                <?php if ($this->session->userdata('role') != 2) { // penyeleksi can't access this ?>
                 <td class="align-middle text-center">
                     <span class="badge badge-warning">
                         <?= $value->data_belum_disalurkan ?>
                     </span>
+                </td>
+                <?php } ?>
                 <td class="align-middle text-center">
                     <span class="badge badge-success">
                         <?= $value->data_tersalur ?>
@@ -209,42 +200,43 @@
                         }
                     ?>
 
-                    
-                    <!-- Send Penyaluran Ke CO Magang-->
-                    <button type="button" class="btn btn-sm btn-icon btn-light-info" data-bs-toggle="modal"
-                        data-bs-target="#modalKirimData<?= $value->id ?>" <?= $disabled ?>>
-                        <i class="fa fa-paper-plane" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top"
-                            title="Kirim Ke CO Magang"></i>
-                    </button>
+                    <?php if ($this->session->userdata('role') != 2) { // Penyelian can't access this ?>
+                        <!-- Send Penyaluran Ke CO Magang-->
+                        <button type="button" class="btn btn-sm btn-icon btn-light-info" data-bs-toggle="modal"
+                            data-bs-target="#modalKirimData<?= $value->id ?>" <?= $disabled ?>>
+                            <i class="fa fa-paper-plane" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top"
+                                title="Kirim Ke CO Magang"></i>
+                        </button>
 
-                    <!-- Modal Kirim Ke CO Magang -->
-                    <div class="modal fade" id="modalKirimData<?= $value->id ?>" tabindex="-1"
-                        aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="modalKirimData">Kirim Data Penyaluran -
-                                        <?= $value->nama ?>
-                                    </h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="alert alert-primary" role="alert">
-                                        <strong>Perhatian!</strong> Pastikan data yang akan dikirim sudah benar!
+                        <!-- Modal Kirim Ke CO Magang -->
+                        <div class="modal fade" id="modalKirimData<?= $value->id ?>" tabindex="-1"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="modalKirimData">Kirim Data Penyaluran -
+                                            <?= $value->nama ?>
+                                        </h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
                                     </div>
-                                    <p>Apa anda yakin ingin mengirim <b>Data Penyaluran</b> ini ke <?= $send_to ?>
-                                    </p>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary"
-                                        data-bs-dismiss="modal">Batal</button>
-                                    <a href="<?= base_url('penyaluran/send_data_penyaluran/' . $value->id . "/" . $send_status) ?>"
-                                        class="btn btn-info"><i class="fa fa-paper-plane" aria-hidden="true"></i> Kirim Ke <?= $send_to ?></a>
+                                    <div class="modal-body">
+                                        <div class="alert alert-primary" role="alert">
+                                            <strong>Perhatian!</strong> Pastikan data yang akan dikirim sudah benar!
+                                        </div>
+                                        <p>Apa anda yakin ingin mengirim <b>Data Penyaluran</b> ini ke <?= $send_to ?>
+                                        </p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Batal</button>
+                                        <a href="<?= base_url('penyaluran/send_data_penyaluran/' . $value->id . "/" . $send_status) ?>"
+                                            class="btn btn-info"><i class="fa fa-paper-plane" aria-hidden="true"></i> Kirim Ke <?= $send_to ?></a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    <?php } ?>
 
 
                     <!-- Detail Penyaluran -->

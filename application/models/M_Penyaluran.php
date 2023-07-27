@@ -13,7 +13,7 @@ class M_Penyaluran extends CI_Model
     // get all data master penyaluran with count data penyaluran by id master penyaluran
     public function get_all_master_penyaluran()
     {
-        $this->db->select('tb_master_penyaluran.*, tb_user.nama as nama_user, user_updated.nama as nama_user_updated, user_assigned.nama as nama_user_assigned');
+        $this->db->select('tb_master_penyaluran.*, tb_user.nama as nama_user, user_updated.nama as nama_user_updated, user_assigned.nama as nama_user_assigned, tb_master_penyaluran.status as status_master_penyaluran');
         $this->db->from('tb_master_penyaluran');
         $this->db->join('tb_user', 'tb_user.id = tb_master_penyaluran.created_by');
         $this->db->join('tb_user as user_updated', 'user_updated.id = tb_master_penyaluran.updated_by', 'left');
@@ -30,6 +30,8 @@ class M_Penyaluran extends CI_Model
             $this->db->where_in('tb_master_penyaluran.status', [1,2]);
             // check id user
             $this->db->where('tb_master_penyaluran.id_user', $id_user);
+        }else if($role == 2) { //role penyelia
+            $this->db->where('tb_master_penyaluran.status', 2);
         }
         
 
