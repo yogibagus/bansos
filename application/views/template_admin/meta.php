@@ -24,6 +24,9 @@
     <link href="<?= base_url() ?>assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
     <!--end::Global Stylesheets Bundle-->
 
+    <!-- add custom css -->
+    <link href="<?= base_url() ?>assets/css/custom.css" rel="stylesheet" type="text/css" />
+
     <!-- begin: datatable -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- end: datatable -->

@@ -159,7 +159,7 @@
                 <th>Norek</th>
                 <th>NIK</th>
                 <th>Tahun</th>
-                <th width="15%">Nama Bansos</th>
+                <!-- <th width="15%">Nama Bansos</th> -->
                 <th>Jenis</th>
                 <th>Kabupaten</th>
                 <th>Kecamatan</th>
@@ -182,7 +182,7 @@
                 <td class="align-middle"><?= $value->norek ?></td>
                 <td class="align-middle"><?= $value->nik ?></td>
                 <td class="align-middle"><?= $value->tahun ?></td>
-                <td class="align-middle"><?= $value->nama_master_bansos ?></td>
+                <!-- <td class="align-middle"><?= $value->nama_master_bansos ?></td> -->
                 <td class="align-middle"><?= $value->jenis_bansos ?></td>
                 <td class="align-middle"><?= $value->kabupaten ?></td>
                 <td class="align-middle"><?= $value->kecamatan ?></td>

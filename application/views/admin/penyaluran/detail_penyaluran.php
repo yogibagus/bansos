@@ -146,8 +146,11 @@
             <?php 
             // check if user is super admin or role is 4
             if (($this->session->userdata('is_super_admin') || $this->session->userdata('role') == 4) && $status == 1) { ?>
-                <a type="button" class="btn btn-sm btn-success mt-3" data-bs-toggle="modal" 
-                    data-bs-target="#modalTersalur">Tersalur</a>
+                <a type="button" class="btn btn-sm btn-icon btn-success mt-3" data-bs-toggle="modal" 
+                    data-bs-target="#modalTersalur">
+                    <i class="fa fa-check" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top"
+                            title="Tersalur"></i>
+                </a>
 
                 <!-- modal tersalur confirmation-->
                 <div class="modal fade" id="modalTersalur" tabindex="-1" aria-hidden="true">
@@ -174,8 +177,11 @@
                     </div>
                 </div>
 
-                <button type="button" class="btn btn-sm btn-danger mt-3" data-bs-toggle="modal"
-                    data-bs-target="#modalTidakTersalur">Tidak Tersalur</button>
+                <button type="button" class="btn btn-sm btn-icon btn-danger mt-3" data-bs-toggle="modal"
+                    data-bs-target="#modalTidakTersalur">
+                    <i class="fa fa-times" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top"
+                            title="Tidak Tersalur"></i>
+                </button>
 
                 <!-- modal tidak tersalur confirmation-->
                 <div class="modal fade" id="modalTidakTersalur" tabindex="-1" aria-hidden="true">

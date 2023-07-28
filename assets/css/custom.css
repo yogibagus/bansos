@@ -1,0 +1,9 @@
+.form-check-input:checked {
+    background-color: #0858d9;
+    border-color: #0b109d;
+}
+
+/* boder for checkbox */
+.form-check-input {
+    border: 3px solid #899197;
+}
