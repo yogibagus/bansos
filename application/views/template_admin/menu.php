@@ -47,6 +47,7 @@
                         </a>
                     </div> -->
 
+                    <?php if ($this->session->userdata('is_super_admin')) { // only superadmin can access this menu ?>
                     <div class="menu-item">
                         <a class="menu-link <?= ($this->uri->segment(2) == "data_user" ? 'active' : '') ?>"
                             href="<?= base_url('user/data_user') ?>">
@@ -55,7 +56,9 @@
                             </span>
                         </a>
                     </div>
+                    <?php } ?>
 
+                    <?php if ($this->session->userdata('is_super_admin') || $this->session->userdata('role') == 2 || $this->session->userdata('role') == 3) {// only superadmin ,penyelia and pic can access this menu ?>
                     <div class="menu-item <?= ($this->uri->segment(1) == "bansos" ? 'active' : '') ?>">
                         <div class="menu-content "><span class="menu-section fs-5 fw-bolder ps-1 py-1">💿 Master
                             </span>
@@ -80,6 +83,7 @@
                             <span class="menu-title">🔖 Data Bansos</span>
                         </a>
                     </div>
+                    <?php } ?>
 
                     <div class="menu-item">
                         <div class="menu-link"><span class="menu-section fs-5 fw-bolder ps-1 py-1">♻️ Penyaluran</span>
@@ -96,6 +100,7 @@
                         </a>
                     </div>
 
+                    <?php if ($this->session->userdata('is_super_admin') || $this->session->userdata('role') == 2) { // only superadmin and penyelia can access this menu ?>
                     <div class="menu-item">
                         <a class="menu-link <?= ($this->uri->segment(2) == "laporan_penyaluran" ? 'active' : '') ?>"
                             href="<?= base_url('laporan/laporan_penyaluran') ?>">
@@ -103,6 +108,7 @@
                             </span>
                         </a>
                     </div>
+                    <?php } ?>
                 </div>
             </div>
         </div>
@@ -201,11 +207,11 @@
                     <!-- add data penyaluran -->
                     <?php if ($this->uri->segment(2) == "data_bansos") { ?>
                     <div class="d-flex align-items-center gap-2 gap-lg-3">
-                        <a href="#" class="btn btn-sm btn-flex btn-dark align-self-center px-3"
-                            data-bs-toggle="modal" data-bs-target="#modalAddDataPenyaluran">
+                        <a href="#" class="btn btn-sm btn-flex btn-dark align-self-center px-3" data-bs-toggle="modal"
+                            data-bs-target="#modalAddDataPenyaluran">
                             <i class="fa fa-plus fs-3" data-bs-toggle="tooltip" data-bs-placement="top"
                                 title="Kirim Data Ke CO Magang"></i>
-                                Tambah Data
+                            Tambah Data
                         </a>
                     </div>
                     <?php } ?>

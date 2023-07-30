@@ -206,10 +206,11 @@ class M_Bansos extends CI_Model
 
         // echo json_encode($in);die;
         $this->db->where('tb_bansos.is_deleted', 0);
-        $this->db->where("tb_bansos.id NOT IN (SELECT id_bansos FROM tb_penyaluran WHERE is_deleted = 0 AND status != 2)", NULL, FALSE);
+        // $this->db->where("tb_bansos.id NOT IN (SELECT id_bansos FROM tb_penyaluran WHERE is_deleted = 0 AND status != 2)", NULL, FALSE);
+        $this->db->where("tb_bansos.id NOT IN (SELECT tb_penyaluran.id_bansos FROM tb_penyaluran LEFT JOIN tb_master_penyaluran ON tb_penyaluran.id_master_penyaluran = tb_master_penyaluran.id WHERE tb_penyaluran.is_deleted = 0 AND tb_penyaluran.status != 2 AND tb_master_penyaluran.is_deleted = 0)", NULL, FALSE);
         $this->db->order_by('tb_bansos.id', 'desc');
         $data = $this->db->get()->result();
-        
+
         // remove data bansos if status 2 (tidak tersalur) by id_master_penyaluran
         if(!empty($data)){
             foreach ($data as $key => $value) {

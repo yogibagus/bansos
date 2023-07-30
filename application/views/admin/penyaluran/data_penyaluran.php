@@ -544,6 +544,12 @@
             var checkedAllValues = localStorage.getItem('checkAllValues<?= $id_master_penyaluran ?>');
             console.log("checkedAllValues", checkedAllValues);
 
+            // if checkedAllValues null or empty set it to false
+            if (checkedAllValues == '' || checkedAllValues == null) {
+                // set local storage checkedAllValues
+                localStorage.setItem('checkAllValues<?= $id_master_penyaluran ?>', false);
+            }
+
             // check if empty
             if ((checkedValues == '' || checkedValues == null) && (checkedAllValues == '' || checkedAllValues == null)) {
                 // close modal

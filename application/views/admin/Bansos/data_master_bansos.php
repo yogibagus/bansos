@@ -99,7 +99,9 @@
                 <th>Tidak Tersalur</th>
                 <th>Dibuat Oleh</th>
                 <th width="15%">Tgl. Dibuat</th>
-                <th width="15%">Aksi</th>
+                <?php if ($this->session->userdata('role') == 1 || $this->session->userdata('role') == 2) { ?>
+                    <th width="15%">Aksi</th>
+                <?php } ?>
             </tr>
         </thead>
         <tbody>
@@ -133,6 +135,7 @@
                 <td class="align-middle">
                     <?= date_format(date_create($value->created_at), "d-m-Y H:i:s") ?>
                 </td>
+                <?php if ($this->session->userdata('role') == 1 || $this->session->userdata('role') == 2) { ?>
                 <td>
                     <!-- Import Data Bansos -->
                     <a type="button" class="btn btn-sm btn-icon btn-light-success" data-bs-toggle="modal"
@@ -332,8 +335,10 @@
                         </div>
                     </div>
                 </td>
+                <?php } ?>
             </tr>
             <?php $no++; } ?>
+            <!-- end php foreach -->    
         </tbody>
     </table>
 </div>

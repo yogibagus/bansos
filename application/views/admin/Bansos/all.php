@@ -226,7 +226,9 @@
                 <th>Kecamatan</th>
                 <th>Kelurahan</th>
                 <th>Tgl Submit</th>
-                <th width="20%">Aksi</th>
+                <?php if ($this->session->userdata('role') == 1 || $this->session->userdata('role') == 2) { ?>
+                    <th width="20%">Aksi</th>
+                <?php } ?>
 
             </tr>
         </thead>
@@ -257,6 +259,7 @@
                 <td class="align-middle">
                     <?= date_format(date_create($value->created_at), "d-m-Y H:i:s") ?>
                 </td>
+                <?php if ($this->session->userdata('role') == 1 || $this->session->userdata('role') == 2) { ?>
                 <td>
                     <!-- Edit Bansos -->
                     <a type="button" class="btn btn-sm btn-icon btn-light-primary" data-bs-toggle="modal"
@@ -427,6 +430,7 @@
                         </div>
                     </div>
                 </td>
+                <?php } ?>
             </tr>
             <?php $no++; } ?>
         </tbody>
