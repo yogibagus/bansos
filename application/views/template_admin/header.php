@@ -21,11 +21,11 @@
                         <!--end::Mobile toggle-->
 
                         <!--begin::Logo image-->
-                        <a href="<?= base_url() ?>index.html">
-                            <img alt="Logo" src="<?= base_url() ?>assets/media/logos/demo44.svg"
-                                class="h-25px theme-light-show" />
-                            <img alt="Logo" src="<?= base_url() ?>assets/media/logos/demo44-dark.svg"
-                                class="h-25px theme-dark-show" />
+                        <a href="<?= base_url() ?>index.html" class="img-fluid">
+                            <img alt="Logo" src="https://i.ibb.co/nwKFY68/Screenshot-2023-07-31-at-00-32-55.png"
+                                class="h-60px theme-light-show" />
+                            <img alt="Logo" src="https://i.ibb.co/nwKFY68/Screenshot-2023-07-31-at-00-32-55.png"
+                                class="h-60px theme-dark-show" />
                         </a>
                         <!--end::Logo image-->
                     </div>

@@ -12,17 +12,17 @@
 
                         <!-- image logo -->
                         <div class="text-center mb-10">
-                            <img alt="Logo" src="<?= base_url() ?>assets/media/logos/demo44.svg"
-                                class="h-50px theme-light-show" />
+                            <img alt="Logo" src="https://i.ibb.co/nwKFY68/Screenshot-2023-07-31-at-00-32-55.png"
+                                class="h-80px theme-light-show" />
                         </div>
 
                         <div class="text-center mb-11">
-                            <h1 class="text-dark fw-bolder mb-3">
+                            <!-- <h1 class="text-dark fw-bolder mb-3">
                                 Masuk
-                            </h1>
+                            </h1> -->
 
                             <div class="text-gray-500 fw-semibold fs-6">
-                                Masuk dengan email dan password
+                                Masuk ke aplikasi dengan email dan password
                             </div>
                         </div>
 
