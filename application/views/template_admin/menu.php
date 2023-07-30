@@ -85,6 +85,7 @@
                     </div>
                     <?php } ?>
 
+                    <?php if ($this->session->userdata('is_super_admin') || $this->session->userdata('role') == 3 || $this->session->userdata('role') == 4) { // only superadmin and pic and co magang can access this menu ?>
                     <div class="menu-item">
                         <div class="menu-link"><span class="menu-section fs-5 fw-bolder ps-1 py-1">♻️ Penyaluran</span>
                         </div>
@@ -99,6 +100,7 @@
                             <span class="menu-title">🗂 Master Penyaluran</span>
                         </a>
                     </div>
+                    <?php } ?>
 
                     <?php if ($this->session->userdata('is_super_admin') || $this->session->userdata('role') == 2) { // only superadmin and penyelia can access this menu ?>
                     <div class="menu-item">
