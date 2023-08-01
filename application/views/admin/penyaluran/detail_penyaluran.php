@@ -140,7 +140,7 @@
         <div>
             <h5 class="mt-3">Total Data: <span id="total_data"><?= count($data) ?></span><br><span>Data Dipilih:<span
                         id="total_checked">
-                        0</span></span></h5>
+                        0</span></span><br><h5>🟡 = Belum Tersalur, 🟢 = Tersalur, 🔴 = Tidak Tersalur</h5></h5>
         </div>
         <div>
             <?php 
@@ -252,12 +252,12 @@
                 </td>
                 <td class="align-middle text-center"><?= $no ?></td>
                 <td class="align-middle">
-                    <?php if ($value->status_penyaluran == 0) { ?>
-                    <span class="badge badge-light">Belum Tersalur</span>
-                    <?php } elseif ($value->status_penyaluran == 1) { ?>
-                    <span class="badge badge-success">Tersalur</span>
-                    <?php } elseif ($value->status_penyaluran == 2) { ?>
-                    <span class="badge badge-danger">Tidak Tersalur</span>
+                    <?php if ($value->status_penyaluran == '0') { ?>
+                        🟡
+                    <?php } elseif ($value->status_penyaluran == '1') { ?>
+                        🟢
+                    <?php } elseif ($value->status_penyaluran == '2') { ?>
+                        🔴
                     <?php } ?>
                 </td>
                 <td class="align-middle"><?= $value->nama ?></td>

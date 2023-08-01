@@ -213,11 +213,12 @@
 <div class="card container p-5">
     <div class="d-flex justify-content-between">
         <div>
-            <h5 class="">Total Data: <span id="total_data"><?= count($data) ?></span>
-        </h5>
+            <h5 class="">Total Data: <span id="total_data"><?= count($data) ?></span><br>
+            <h5>🟡 = Belum Tersalur, 🟢 = Tersalur, 🔴 = Tidak Tersalur</h5>
+            </h5>
         </div>
         <div>
-            <h5>🟡 = Belum Tersalur, 🟢 = Tersalur, 🔴 = Tidak Tersalur</h5>
+            
         </div>
     </div>
     <table class="table table-striped table-hover fw-bold" id="dataTables">
