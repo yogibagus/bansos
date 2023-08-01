@@ -173,15 +173,17 @@
                     </div>
                     <?php } ?>
 
-                    <!-- add master bansos -->
-                    <?php if ($this->uri->segment(2) == "data_master_bansos") { ?>
-                    <div class="d-flex align-items-center gap-2 gap-lg-3">
-                        <a href="#" class="btn btn-sm btn-flex btn-icon btn-dark align-self-center px-3"
-                            data-bs-toggle="modal" data-bs-target="#modalAddMasterBansos">
-                            <i class="ki-outline ki-plus-square fs-3" data-bs-toggle="tooltip" data-bs-placement="top"
-                                title="Tambah Master Bansos"></i>
-                        </a>
-                    </div>
+                    <?php if ($this->session->userdata('is_super_admin') || $this->session->userdata('role') == 2) {// only superadmin ,penyelia and pic can access this menu ?>
+                        <!-- add master bansos -->
+                        <?php if ($this->uri->segment(2) == "data_master_bansos") { ?>
+                        <div class="d-flex align-items-center gap-2 gap-lg-3">
+                            <a href="#" class="btn btn-sm btn-flex btn-icon btn-dark align-self-center px-3"
+                                data-bs-toggle="modal" data-bs-target="#modalAddMasterBansos">
+                                <i class="ki-outline ki-plus-square fs-3" data-bs-toggle="tooltip" data-bs-placement="top"
+                                    title="Tambah Master Bansos"></i>
+                            </a>
+                        </div>
+                        <?php } ?>
                     <?php } ?>
 
                     <!-- add data bansos -->

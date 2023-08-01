@@ -211,6 +211,15 @@
 </div> -->
 
 <div class="card container p-5">
+    <div class="d-flex justify-content-between">
+        <div>
+            <h5 class="">Total Data: <span id="total_data"><?= count($data) ?></span>
+        </h5>
+        </div>
+        <div>
+            <h5>🟡 = Belum Tersalur, 🟢 = Tersalur, 🔴 = Tidak Tersalur</h5>
+        </div>
+    </div>
     <table class="table table-striped table-hover fw-bold" id="dataTables">
         <thead class="thead-inverse bg-dark text-white">
             <tr>
@@ -227,7 +236,7 @@
                 <th>Kelurahan</th>
                 <th>Tgl Submit</th>
                 <?php if ($this->session->userdata('role') == 1 || $this->session->userdata('role') == 2) { ?>
-                    <th width="20%">Aksi</th>
+                <th width="20%">Aksi</th>
                 <?php } ?>
 
             </tr>
@@ -239,11 +248,11 @@
                 <td class="align-middle text-center"><?= $no ?></td>
                 <th class="align-middle">
                     <?php if ($value->status_penyaluran == '0') { ?>
-                    <span class="badge badge-warning">Belum Tersalur</span>
+                        🟡
                     <?php } elseif ($value->status_penyaluran == '1') { ?>
-                    <span class="badge badge-success">Tersalur</span>
+                        🟢
                     <?php } elseif ($value->status_penyaluran == '2') { ?>
-                    <span class="badge badge-danger">Tidak Tersalur</span>
+                        🔴
                     <?php } ?>
                 </th>
                 <td class="align-middle"><?= $value->nama ?></td>
@@ -415,7 +424,7 @@
                                         aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <p>Apa anda yakin ingin menghapus <b>Data Bansos</b> ini?<br>
+                                    <p>Apa anda yakin ingin menghapus <b>Data Bansos</b> ini?
                                         <span class="text-danger">Perhatian! Data yang sudah dihapus tidak dapat
                                             dikembalikan!</span>
                                     </p>
@@ -440,8 +449,7 @@
 <!-- config datatables -->
 <script>
     $(document).ready(function () {
-        $('#dataTables').DataTable({
-        });
+        $('#dataTables').DataTable({});
     });
 </script>
 
