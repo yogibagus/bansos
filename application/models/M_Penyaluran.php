@@ -26,12 +26,11 @@ class M_Penyaluran extends CI_Model
         if($role == 4){ // role CO magang
             // get id user
             $id_user = $this->session->userdata('id');
+            // check id user
+            $this->db->where('tb_master_penyaluran.status', 2);
+            $this->db->where('tb_master_penyaluran.id_user = '.$id_user.' OR tb_master_penyaluran.id_user = -1');
             // check status 1 or 2 with query or
             $this->db->where_in('tb_master_penyaluran.status', [1,2]);
-            // check id user
-            $this->db->where('tb_master_penyaluran.id_user', $id_user);
-        }else if($role == 2) { //role penyelia
-            $this->db->where('tb_master_penyaluran.status', 2);
         }
         
 
